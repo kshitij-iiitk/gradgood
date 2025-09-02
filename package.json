@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "test": "nodemon ./backend/server.js && cd ./frontend && npm run dev ",
-    "server": "nodemon ./backend/server.js",
+    "start": "nodemon ./backend/server.js",
+    "build": "npm install && npm install --prefix frontend && npm run build --prefix frontend",
     "frontend": "cd ./frontend && npm run dev"
   },
   "keywords": [],
