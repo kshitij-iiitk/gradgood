@@ -29,6 +29,10 @@ app.use("/api/item", itemRoutes);
 app.use("/api/transactions", transactionRoutes);
 app.use("/api/notifications", notificationRoutes);
 
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "client/build", "index.html"));
+});
+
 // Start server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, async () => {
