@@ -94,13 +94,6 @@ export function AppSidebar() {
     handleStart(e.clientX);
   };
 
-  const handleMouseMove = (e: React.MouseEvent) => {
-    handleMove(e.clientX);
-  };
-
-  const handleMouseUp = () => {
-    handleEnd();
-  };
 
   // Touch events
   const handleTouchStart = (e: React.TouchEvent) => {

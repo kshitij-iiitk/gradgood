@@ -66,7 +66,6 @@ const Chatroom = () => {
             (p) => p._id !== authUser?._id
           );
           const latestMessage = conv.messages[conv.messages.length - 1];
-          const isSelected = selectedConversation?._id === conv._id;
 
           return (
             <div

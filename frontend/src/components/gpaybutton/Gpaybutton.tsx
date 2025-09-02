@@ -9,6 +9,7 @@ interface GPayButtonProps {
    toUser: { name: string; upiId: string };
    amount: number;
    onPaymentSuccess?: (msg: string) => void; // NEW
+    itemId?: string;
 }
 
 interface Transaction {

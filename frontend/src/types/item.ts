@@ -9,6 +9,7 @@ export interface Item {
   phoneNumber: string;
   photo: string[];
   price: number;
+  gPayID:string;
   description: string;
   sold: boolean;
   createdAt?: string;
