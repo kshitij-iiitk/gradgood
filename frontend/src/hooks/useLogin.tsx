@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { z } from "zod";
-import { useAuthContext } from "@/context/AuthContext";
+import { useAuthContext, type User as AuthUser } from "@/context/AuthContext";
 import toast from "react-hot-toast";
 
 // -----------------------------
@@ -13,17 +13,6 @@ const loginSchema = z.object({
 
 type LoginInput = z.infer<typeof loginSchema>;
 
-interface AuthUser {
-  _id: string;
-  userName: string;
-  rollNumber: string;
-  profilePic?: string;
-  email?: string;
-  token?: string;
-  gPayID?: string;
-  phoneNumber?: string;
-
-}
 
 interface UseLoginReturn {
   login: (input: LoginInput) => Promise<void>;
@@ -67,13 +56,13 @@ const useLogin = (): UseLoginReturn => {
 
       const user: AuthUser = {
         _id: data._id!,
-        userName: data.userName ?? "", // fallback
-        rollNumber: data.rollNumber ?? result.data.rollNumber, // ensure rollNumber is present
-        profilePic: data.profilePic,
-        gPayID: data.gPayID,
-        email: data.email,
-        phoneNumber: data.phoneNumber,
-        token: data.token,
+        userName: data.userName ?? "",
+        rollNumber: data.rollNumber ?? result.data.rollNumber,
+        profilePic: data.profilePic ?? "",
+        gPayID: data.gPayID ?? "", // fallback ensures it's always a string
+        email: data.email ?? "",
+        phoneNumber: data.phoneNumber ?? "",
+        token: data.token ?? "",
       };
 
       localStorage.setItem("User", JSON.stringify(user));

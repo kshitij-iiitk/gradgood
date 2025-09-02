@@ -20,7 +20,7 @@ export const useCreateConversation = () => {
   const { setSelectedConversation } = useConversation();
 
   const makeConversation = async (
-    receiverData: Pick<User, "_id" | "userName" | "email">
+    receiverData: Pick<User, "_id" | "userName" | "email" | "profilePic">
   ) => {
     const authUserStr = localStorage.getItem("User");
     if (!authUserStr) {
@@ -47,12 +47,14 @@ export const useCreateConversation = () => {
           name: authUser.userName || "",
           email: authUser.email || "",
           userName: authUser.userName || "",
+          profilePic: authUser.profilePic || "", // added
         },
         {
           _id: receiverData._id,
           name: receiverData.userName || "",
           email: receiverData.email || "",
           userName: receiverData.userName || "",
+          profilePic: receiverData.profilePic || "", // added
         },
       ];
 
