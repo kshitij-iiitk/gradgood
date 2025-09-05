@@ -7,13 +7,13 @@ import cookieParser from "cookie-parser";
 import path from "path";
 import cors from "cors";
 
-import authRoutes from "./routes/auth.route.js";
-import messageRoutes from "./routes/message.route.js";
-import userRoutes from "./routes/user.route.js";
-import itemRoutes from "./routes/item.route.js";
-import transactionRoutes from "./routes/transaction.route.js";
+import authRoutes from "./auth.route.js";
+import messageRoutes from "./message.route.js";
+import userRoutes from "./user.route.js";
+import itemRoutes from "./item.route.js";
+import transactionRoutes from "./transaction.route.js";
 
-import connectToMongoDB from "./db/connectToMongoDB.js";
+import connectToMongoDB from "../db/connectToMongoDB.js";
 
 dotenv.config({ override: true });
 
