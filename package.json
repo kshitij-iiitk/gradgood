@@ -8,7 +8,7 @@
     "dev": "npm run server & npm run frontend",
     "server": "nodemon ./backend/server.js",
     "build": "npm install && npm install --prefix frontend && npm run build --prefix frontend",
-    "start": "node ./server.js",
+    "start": "node ./backend/server.js",
     "lint": "eslint ./frontend",
     "preview": "npm run preview --prefix ./frontend"
   },
