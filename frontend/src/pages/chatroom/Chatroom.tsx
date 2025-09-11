@@ -26,10 +26,34 @@ const Chatroom = () => {
     refetch();
   }, [location.pathname, refetch]);
 
-  if (loading)
-    return <p className="p-6 text-gray-400">Loading conversations...</p>;
-  if (!conversations.length)
-    return <p className="p-6 text-gray-400">No conversations found.</p>;
+  if (loading) {
+    return (
+      <div className="h-[97vh] bg-gradient-to-br from-gray-900 via-black to-gray-800 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-12 h-12 border-4 border-gray-600 border-t-indigo-500 rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-400 text-lg">Loading conversations...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!conversations.length) {
+    return (
+      <div className="h-[97vh] bg-gradient-to-br from-gray-900 via-black to-gray-800 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-24 h-24 bg-gray-800/50 rounded-full flex items-center justify-center mb-6">
+            <svg className="w-12 h-12 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+            </svg>
+          </div>
+          <h3 className="text-xl font-semibold text-gray-300 mb-2">No conversations yet</h3>
+          <p className="text-gray-500 text-center max-w-md">
+            Start browsing items and connect with sellers to begin your first conversation!
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   const goBack = () => {
     setMobileView("list");
@@ -58,9 +82,16 @@ const Chatroom = () => {
   };
 
   return (
-    <div className="h-[97vh] grid grid-cols-1 lg:grid-cols-3 bg-black/90 backdrop-blur-md text-gray-100 lg:px-3">
+    <div className="h-[97vh] grid grid-cols-1 lg:grid-cols-3 bg-gradient-to-br from-gray-900 via-black to-gray-800 text-gray-100 lg:px-3">
       {/* Desktop Conversation List */}
-      <div className="hidden lg:flex flex-col border-r border-gray-800 overflow-y-auto p-4 space-y-2">
+      <div className="hidden lg:flex flex-col border-r border-gray-700/50 overflow-y-auto p-6 space-y-3">
+        <div className="mb-4">
+          <h2 className="text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent mb-2">
+            Messages
+          </h2>
+          <p className="text-gray-400 text-sm">{conversations.length} conversation{conversations.length !== 1 ? 's' : ''}</p>
+        </div>
+        
         {conversations.map((conv) => {
           const otherParticipants = conv.participants.filter(
             (p) => p._id !== authUser?._id
@@ -71,11 +102,21 @@ const Chatroom = () => {
             <div
               key={conv._id}
               onClick={() => openConvo(conv)}
-              className={`cursor-pointer transition-all duration-300 p-4 
-                   bg-black/40 backdrop-blur-md border border-gray-700 rounded-2xl 
-                   shadow-md hover:shadow-lg hover:bg-neutral-950/10
-                  `}
+              className={`cursor-pointer transition-all duration-300 p-4 rounded-2xl border shadow-lg hover:shadow-xl transform hover:scale-[1.02] ${
+                selectedConversation?._id === conv._id
+                  ? "bg-indigo-500/20 border-indigo-500/50 shadow-indigo-500/20"
+                  : "bg-black/60 backdrop-blur-xl border-gray-700/50 hover:border-gray-600/70 hover:bg-black/70"
+              }`}
             >
+              <div className="flex items-center gap-3">
+                {/* Avatar */}
+                <div className="w-12 h-12 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full flex items-center justify-center text-white font-bold text-lg flex-shrink-0">
+                  {otherParticipants.length
+                    ? otherParticipants[0].userName?.charAt(0).toUpperCase()
+                    : "?"}
+                </div>
+                
+                <div className="flex-1 min-w-0">
               <div className="font-semibold text-gray-100 truncate text-base">
                 {otherParticipants.length
                   ? otherParticipants.map((p) => p.userName).join(", ")
@@ -85,9 +126,16 @@ const Chatroom = () => {
                 {latestMessage
                   ? `${latestMessage.senderId._id === authUser?._id
                     ? "You: "
-                    : latestMessage.senderId.userName + ": "
+                        : ""
                   }${latestMessage.message}`
                   : "No messages yet"}
+              </div>
+            </div>
+                
+                {/* Unread indicator */}
+                {latestMessage && latestMessage.senderId._id !== authUser?._id && (
+                  <div className="w-3 h-3 bg-indigo-500 rounded-full"></div>
+                )}
               </div>
             </div>
           );
@@ -96,23 +144,30 @@ const Chatroom = () => {
 
 
       {/* Desktop Chat Panel */}
-      <div className="hidden lg:h-[95vh] lg:flex lg:col-span-2 bg-black/80 backdrop-blur-md border-l border-gray-800">
+      <div className="hidden lg:h-[95vh] lg:flex lg:col-span-2 bg-black/60 backdrop-blur-xl border-l border-gray-700/50 rounded-r-3xl overflow-hidden">
         {selectedConversation ? (
           <Chat />
         ) : (
-          <p className="m-6 text-gray-400">
+          <div className="flex-1 flex items-center justify-center">
             <NoChatSelected/>
-          </p>
+          </div>
         )}
       </div>
 
       {/* Mobile Layout */}
-      <div className="lg:hidden fixed inset-0 z-50">
+      <div className="lg:hidden fixed inset-0 z-50 bg-gradient-to-br from-gray-900 via-black to-gray-800">
         {/* Conversation List */}
         <div
-          className={`absolute inset-0 bg-black/70 backdrop-blur-xl p-4 transform transition-transform duration-300 ease-in-out 
+          className={`absolute inset-0 p-6 transform transition-transform duration-300 ease-in-out 
                 ${mobileView === "list" ? "translate-x-0" : "-translate-x-full"}`}
         >
+          <div className="mb-6">
+            <h2 className="text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent mb-2">
+              Messages
+            </h2>
+            <p className="text-gray-400 text-sm">{conversations.length} conversation{conversations.length !== 1 ? 's' : ''}</p>
+          </div>
+          
           {conversations.map((conv) => {
             const otherParticipants = conv.participants.filter(
               (p) => p._id !== authUser?._id
@@ -123,27 +178,38 @@ const Chatroom = () => {
               <div
                 key={conv._id}
                 onClick={() => openConvo(conv)}
-                className="cursor-pointer transition-all duration-300 p-4 mb-3 
-                     bg-black/40 backdrop-blur-md border border-gray-700 rounded-2xl 
-                     shadow-lg hover:shadow-xl hover:bg-white/10"
+                className="cursor-pointer transition-all duration-300 p-4 mb-4 
+                     bg-black/60 backdrop-blur-xl border border-gray-700/50 rounded-2xl 
+                     shadow-lg hover:shadow-xl hover:border-gray-600/70 hover:bg-black/70 transform hover:scale-[1.02]"
               >
-                <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  {/* Avatar */}
+                  <div className="w-12 h-12 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full flex items-center justify-center text-white font-bold text-lg flex-shrink-0">
+                    {otherParticipants.length
+                      ? otherParticipants[0].userName?.charAt(0).toUpperCase()
+                      : "?"}
+                  </div>
+                  
+                  <div className="flex-1 min-w-0">
                   <div className="font-semibold text-gray-100 truncate text-base">
                     {otherParticipants.length
                       ? otherParticipants.map((p) => p.userName).join(", ")
                       : "Unknown User"}
                   </div>
-                  <div className="text-gray-500 text-xs ml-2">
-                    {latestMessage ? "●" : ""}
-                  </div>
-                </div>
                 <div className="text-gray-400 text-sm truncate mt-1">
                   {latestMessage
                     ? `${latestMessage.senderId._id === authUser?._id
                       ? "You: "
-                      : latestMessage.senderId.userName + ": "
+                          : ""
                     }${latestMessage.message}`
                     : "No messages yet"}
+                </div>
+              </div>
+                  
+                  {/* Unread indicator */}
+                  {latestMessage && latestMessage.senderId._id !== authUser?._id && (
+                    <div className="w-3 h-3 bg-indigo-500 rounded-full"></div>
+                  )}
                 </div>
               </div>
             );
@@ -153,16 +219,29 @@ const Chatroom = () => {
         {/* Chat Panel */}
         {selectedConversation && (
           <div
-            className={`absolute inset-0 bg-black/90 backdrop-blur-md transform transition-transform duration-300 ease-in-out ${mobileView === "chat" ? "translate-x-0" : "translate-x-full"
-              } flex flex-col`}
+            className={`absolute inset-0 transform transition-transform duration-300 ease-in-out  flex flex-col`}
           >
-            <div className="flex items-center p-4 border-b border-gray-800">
+            <div className="flex items-center p-4 border-b border-gray-700/50 bg-black/60 backdrop-blur-xl">
               <button
                 onClick={goBack}
-                className="text-gray-200 hover:text-white transition"
+                className="text-gray-200 hover:text-white transition-colors duration-200 p-2 rounded-full hover:bg-gray-700/50"
               >
-                <IoChevronBack />
+                <IoChevronBack className="w-6 h-6" />
               </button>
+              <div className="ml-3 flex items-center gap-3">
+                <div className="w-10 h-10 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full flex items-center justify-center text-white font-bold">
+                  {selectedConversation.participants
+                    .find(p => p._id !== authUser?._id)
+                    ?.userName?.charAt(0).toUpperCase() || "?"}
+                </div>
+                <div>
+                  <h3 className="font-semibold text-white">
+                    {selectedConversation.participants
+                      .find(p => p._id !== authUser?._id)
+                      ?.userName || "Unknown User"}
+                  </h3>
+                </div>
+              </div>
             </div>
             <Chat />
           </div>

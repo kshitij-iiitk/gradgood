@@ -6,7 +6,7 @@ export interface EditProfileForm {
   userName: string;
   profilePic: string;
   phoneNumber?: string;
-  gPayID?: string;
+  upiId?: string;
 }
 
 export default function useEditProfile(authUser: any) {
@@ -14,7 +14,7 @@ export default function useEditProfile(authUser: any) {
     userName: authUser?.userName || "",
     profilePic: authUser?.profilePic || "",
     phoneNumber: authUser?.phoneNumber || "",
-    gPayID: authUser?.gPayID || "",
+    upiId: authUser?.upiId || "",
   });
 
   const [loading, setLoading] = useState(false);
@@ -42,7 +42,7 @@ export default function useEditProfile(authUser: any) {
 
     setLoading(true);
     try {
-      const res = await fetch(`/api/user/${authUser._id}`, {
+      const res = await fetch(`/api/user/edi/${authUser._id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),

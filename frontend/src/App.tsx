@@ -28,8 +28,8 @@ function App() {
   return (
     <div
       className={`w-full min-h-screen 
-    ${authUser && !chatSelected ? "lg:pl-[18vw] pt-[6vh]" : "lg:pt-0"} 
-    p-2 lg:pt-4 lg:pb-0`}
+    ${authUser && !chatSelected ? "lg:pl-[17vw]" : ""} 
+     lg:pb-0`}
     >
       {authUser && !chatSelected ? <AppSidebar /> : ""}
       <Routes>

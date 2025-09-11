@@ -31,7 +31,7 @@ const userSchema = new mongoose.Schema(
       sparse: true,
       unique: true,
     },
-    gPayID: {
+    upiId: {
       type: String,
     },
     googleId: {

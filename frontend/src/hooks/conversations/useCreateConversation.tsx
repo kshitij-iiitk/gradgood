@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
@@ -8,7 +8,7 @@ import { type User } from "@/context/AuthContext";
 
 interface ConversationResponse {
   _id: string;
-  participants: string[]; // IDs from backend
+  participants: string[];
   messages: any[];
   createdAt: string;
   updatedAt: string;
@@ -19,18 +19,35 @@ export const useCreateConversation = () => {
   const navigate = useNavigate();
   const { setSelectedConversation } = useConversation();
 
+  const authUser: User | null = useMemo(() => {
+    const stored = localStorage.getItem("User");
+    return stored ? JSON.parse(stored) : null;
+  }, []);
+
   const makeConversation = async (
     receiverData: Pick<User, "_id" | "userName" | "email" | "profilePic">
   ) => {
-    const authUserStr = localStorage.getItem("User");
-    if (!authUserStr) {
+    if (!authUser) {
       toast.error("User not logged in");
       return;
     }
 
-    const authUser: User = JSON.parse(authUserStr);
+    // Optimistic conversation object
+    const optimisticConversation: FrontendConversation = {
+      _id: "temp-" + Date.now(),
+      participants: [
+        { ...authUser },
+        { ...receiverData },
+      ],
+      messages: [],
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
 
+    setSelectedConversation(optimisticConversation);
+    navigate("/chats");
     setLoading(true);
+
     try {
       const res = await fetch(`/api/user/create/${receiverData._id}`, {
         method: "POST",
@@ -41,33 +58,16 @@ export const useCreateConversation = () => {
 
       const data: ConversationResponse = await res.json();
 
-      const participants = [
-        {
-          _id: authUser._id,
-          name: authUser.userName || "",
-          email: authUser.email || "",
-          userName: authUser.userName || "",
-          profilePic: authUser.profilePic || "", // added
-        },
-        {
-          _id: receiverData._id,
-          name: receiverData.userName || "",
-          email: receiverData.email || "",
-          userName: receiverData.userName || "",
-          profilePic: receiverData.profilePic || "", // added
-        },
-      ];
-
+      // Merge backend response with frontend participants
       const conversation: FrontendConversation = {
+        ...optimisticConversation,
         _id: data._id,
-        participants,
         messages: data.messages || [],
         createdAt: data.createdAt,
         updatedAt: data.updatedAt,
       };
 
       setSelectedConversation(conversation);
-      navigate(`/chats`);
     } catch (err: any) {
       console.error(err);
       toast.error(err.message || "Failed to create conversation");

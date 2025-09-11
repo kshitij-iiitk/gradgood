@@ -49,47 +49,90 @@ const PostItem = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-black p-4">
-      <Card className="w-full max-w-md p-6 rounded-2xl bg-black/60 backdrop-blur-lg border border-gray-800 shadow-xl">
-        <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-bold text-gray-100">Post a New Item</CardTitle>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-black to-gray-800 p-4">
+      {/* Background decorative elements */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-indigo-500/10 rounded-full blur-3xl"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl"></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl"></div>
+      </div>
+
+      <Card className="w-full max-w-2xl p-8 rounded-3xl bg-black/70 backdrop-blur-xl border border-gray-700/50 shadow-2xl relative z-10 transform hover:scale-[1.01] transition-all duration-300">
+        <CardHeader className="text-center space-y-4">
+          <div className="mx-auto w-16 h-16 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center mb-4">
+            <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+            </svg>
+          </div>
+          <CardTitle className="text-3xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+            Post New Item
+          </CardTitle>
+          <p className="text-gray-400 text-sm">Share your item with the community</p>
         </CardHeader>
 
-        <CardContent className="flex flex-col gap-4">
-          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <CardContent className="px-0">
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Item Name */}
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-300 block">Item Name *</label>
             <Input
               name="itemName"
-              placeholder="Item Name"
+                  placeholder="What are you selling?"
               value={form.itemName}
               onChange={handleChange}
-              className="bg-black/50 text-gray-100 border border-gray-700 placeholder-gray-400 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
+                  className="px-4 py-3 rounded-xl bg-gray-900/50 text-gray-100 border border-gray-600 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 hover:border-gray-500"
               required
             />
+              </div>
 
+              {/* Price */}
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-300 block">Price (₹) *</label>
             <Input
               name="price"
               type="number"
-              placeholder="Price"
+                  placeholder="0"
               value={form.price}
               onChange={handleChange}
-              className="bg-black/50 text-gray-100 border border-gray-700 placeholder-gray-400 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
+                  className="px-4 py-3 rounded-xl bg-gray-900/50 text-gray-100 border border-gray-600 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 hover:border-gray-500"
               required
             />
+              </div>
+            </div>
 
+            {/* Description */}
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-300 block">Description</label>
             <Textarea
               name="description"
-              placeholder="Description"
+                placeholder="Describe your item in detail..."
               value={form.description}
               onChange={handleChange}
-              className="bg-black/50 text-gray-100 border border-gray-700 placeholder-gray-400 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
+                rows={4}
+                className="px-4 py-3 rounded-xl bg-gray-900/50 text-gray-100 border border-gray-600 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 hover:border-gray-500 resize-none"
             />
+            </div>
 
-            <div className="flex flex-col gap-2">
+            {/* Photo Upload */}
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-300 block">Photos</label>
+              <div className="relative">
               <label
                 htmlFor="photos"
-                className="cursor-pointer px-4 py-2 bg-black/50 border border-gray-700 rounded-lg text-gray-100 text-center hover:bg-black/60 transition"
-              >
-                Upload Item Photos
+                  className="cursor-pointer flex items-center justify-center px-6 py-8 bg-gray-900/50 border-2 border-gray-600 border-dashed rounded-xl text-gray-300 text-center hover:bg-gray-800/50 hover:border-gray-500 transition-all duration-200 group"
+                >
+                  <div className="flex flex-col items-center gap-3">
+                    <div className="w-12 h-12 bg-gray-700/50 rounded-full flex items-center justify-center group-hover:bg-gray-600/50 transition-colors duration-200">
+                      <svg className="w-6 h-6 text-gray-400 group-hover:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                      </svg>
+                    </div>
+                    <div>
+                      <p className="font-medium">Upload photos of your item</p>
+                      <p className="text-sm text-gray-500">PNG, JPG up to 10MB each</p>
+                    </div>
+                  </div>
               </label>
               <input
                 id="photos"
@@ -97,23 +140,56 @@ const PostItem = () => {
                 accept="image/*"
                 multiple
                 onChange={handlePhotoChange}
-                className="hidden" // hide default file input
+                  className="hidden"
               />
+              </div>
+              
               {form.photosFiles.length > 0 && (
-                <p className="text-gray-300 text-sm mt-1">
-                  {form.photosFiles.length} file{form.photosFiles.length > 1 ? "s" : ""} selected
-                </p>
+                <div className="mt-4">
+                  <div className="flex items-center gap-2 text-indigo-400 text-sm mb-2">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    {form.photosFiles.length} photo{form.photosFiles.length > 1 ? "s" : ""} selected
+                  </div>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                    {form.photosFiles.map((file, index) => (
+                      <div key={index} className="relative">
+                        <img
+                          src={URL.createObjectURL(file)}
+                          alt={`Preview ${index + 1}`}
+                          className="w-full h-20 object-cover rounded-lg border border-gray-600"
+                        />
+                        <div className="absolute inset-0 bg-black/20 rounded-lg"></div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               )}
             </div>
 
-
+            {/* Submit Button */}
+            <div className="pt-4">
             <Button
               type="submit"
               disabled={loading}
-              className="w-full py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg shadow-md transition-all duration-200 hover:scale-105"
+                className="w-full py-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold rounded-xl shadow-lg transition-all duration-200 hover:scale-[1.02] hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed text-lg"
             >
-              {loading ? "Posting..." : "Post Item"}
+                {loading ? (
+                  <div className="flex items-center justify-center gap-2">
+                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                    Posting Item...
+                  </div>
+                ) : (
+                  <div className="flex items-center justify-center gap-2">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                    </svg>
+                    Post Item
+                  </div>
+                )}
             </Button>
+            </div>
           </form>
         </CardContent>
       </Card>

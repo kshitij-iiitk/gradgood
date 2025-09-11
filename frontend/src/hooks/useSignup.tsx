@@ -14,12 +14,12 @@ function transformEmail(email: string): { rollNumber: string; userName: string }
   const match = rollPart.match(/^(\d+)([a-zA-Z]+)(\d+)$/);
   if (!match) throw new Error("Invalid email format for roll number");
 
-  const year = match[1];
+  const year = `20${match[1].padStart(2, "0")}`;
   const dept = match[2];
   const id = match[3];
 
   return {
-    rollNumber: `20${year}${dept.toUpperCase()}${id.padStart(4, "0")}`,
+    rollNumber: `${year}${dept.toUpperCase()}${id.padStart(4, "0")}`,
     userName: userName,
   };
 }

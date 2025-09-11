@@ -7,7 +7,7 @@ export interface User {
   email?: string;
   profilePic?: string;
   token?: string;
-  gPayID:string;
+  upiId:string;
   phoneNumber?:string;
 }
 

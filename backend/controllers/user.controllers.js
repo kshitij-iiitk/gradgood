@@ -151,3 +151,21 @@ export const editUser = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
+
+export const getUser= async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findById(id).select("-password"); 
+    // exclude password for security
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    res.json(user);
+  } catch (err) {
+    console.error("Error fetching user:", err);
+    res.status(500).json({ error: "Failed to fetch user details" });
+  }
+}

@@ -20,7 +20,6 @@ const PORT = process.env.PORT || 3000;
 // Changed from the complex ES module approach to:
 const __dirname = path.resolve();
 
-console.log(__dirname)
 
 // Middlewares
 // app.use(cors({ origin: "http://localhost:3000", credentials: true }));

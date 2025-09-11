@@ -8,6 +8,7 @@ export interface Conversation {
     _id: string;
     userName?: string;
     profilePic:string;
+    upiID:string;
   }[];
   messages: Message[];
   createdAt?: string;

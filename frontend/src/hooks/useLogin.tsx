@@ -43,6 +43,7 @@ const useLogin = (): UseLoginReturn => {
       console.log("DONE Fetching")
 
       console.log("Status:", res.status, "OK:", res.ok);
+      
 
       if (!res.ok) {
         throw new Error("Network response was not ok");
@@ -59,7 +60,7 @@ const useLogin = (): UseLoginReturn => {
         userName: data.userName ?? "",
         rollNumber: data.rollNumber ?? result.data.rollNumber,
         profilePic: data.profilePic ?? "",
-        gPayID: data.gPayID ?? "", // fallback ensures it's always a string
+        upiId: data.upiId ?? "", // fallback ensures it's always a string
         email: data.email ?? "",
         phoneNumber: data.phoneNumber ?? "",
         token: data.token ?? "",

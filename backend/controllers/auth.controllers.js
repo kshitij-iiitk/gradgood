@@ -14,7 +14,7 @@ export const signup = async (req, res) => {
       password,
       email,
       profilePic,
-      gPayID,
+      upiId,
       phoneNumber,
     } = req.body;
 
@@ -29,7 +29,7 @@ export const signup = async (req, res) => {
     const newUser = new User({
       rollNumber,
       email,
-      gPayID,
+      upiId,
       phoneNumber,
       userName,
       password: hashedPassword,
@@ -43,7 +43,7 @@ export const signup = async (req, res) => {
       message: "User registered successfully",
       _id: newUser._id,
       email:newUser.email,
-      gPayID:newUser.gPayID,
+      upiId:newUser.upiId,
       phoneNumber:newUser.phoneNumber,
       userName: newUser.userName,
       rollNumber: newUser.rollNumber,
@@ -84,7 +84,7 @@ export const login = async (req, res) => {
       _id: user._id,
       userName: user.userName,
       email: user.email,
-      gPayID: user.gPayID,
+      upiId: user.upiId,
       phoneNumber: user.phoneNumber,
       rollNumber: user.rollNumber,
       profilePic: user.profilePic,
