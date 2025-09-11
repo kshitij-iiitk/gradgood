@@ -101,7 +101,9 @@ export default function MessageInput() {
                 name: selectedConversation?.participants.find(
               (p) => p._id !== selectedConversation.participants[0]._id
                 )?.userName || "User",
-                upiId: "example@upi",
+                upiId: selectedConversation?.participants.find(
+              (p) => p._id !== selectedConversation.participants[0]._id
+                )?.upiID || "User" ,
           }}
           amount={parseInt(text, 10)}
           onPaymentSuccess={handlePaymentSuccess}

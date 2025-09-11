@@ -8,7 +8,7 @@ export interface User {
   phoneNumber?: string;
   profilePic?: string;
   email?: string;
-  gPayID?: string;
+  upiId?: string;
   googleId?: string;
   isGoogleUser: boolean;
   createdAt: string;

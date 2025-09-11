@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import useNotifications, { type Notification } from "@/hooks/useNotification";
 
 export default function Notifications() {
-  const { notifications, loading, fetchNotifications, markAsRead } = useNotifications();
+  const { notifications, fetchNotifications, markAsRead } = useNotifications();
 
   useEffect(() => {
     fetchNotifications();
@@ -22,12 +22,7 @@ export default function Notifications() {
         </div>
 
         {/* Loading state */}
-        {loading ? (
-          <div className="flex flex-col items-center justify-center py-20">
-            <div className="w-12 h-12 border-4 border-gray-600 border-t-indigo-500 rounded-full animate-spin mb-4"></div>
-            <p className="text-gray-400 text-lg">Loading notifications...</p>
-          </div>
-        ) : notifications.length === 0 ? (
+        {notifications.length === 0  ? (
           /* Empty state */
           <div className="flex flex-col items-center justify-center py-20">
             <div className="w-24 h-24 bg-gray-800/50 rounded-full flex items-center justify-center mb-6">
@@ -48,10 +43,7 @@ export default function Notifications() {
             <h3 className="text-xl font-semibold text-gray-300 mb-2">
               No notifications yet
             </h3>
-            <p className="text-gray-500 text-center max-w-md">
-              When you have new activities, they'll appear here to keep you
-              updated.
-            </p>
+            
           </div>
         ) : (
           /* Notifications list */

@@ -38,7 +38,7 @@ export default function GPayButton({
   const handleCreateTransaction = async () => {
     setLoading(true);
     try {
-      if (!authUser?.gPayID) {
+      if (!authUser?.upiId) {
         toast.error("Missing Google Pay ID");
         return;
       }
@@ -46,7 +46,7 @@ export default function GPayButton({
       const res = await fetch("/api/transactions/create", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ fromUser: authUser.gPayID, toUser, amount }),
+        body: JSON.stringify({ fromUser: authUser.upiId, toUser, amount }),
       });
 
       if (!res.ok) {

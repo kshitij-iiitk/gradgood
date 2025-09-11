@@ -8,6 +8,7 @@ import useGetItem from "@/hooks/items/useGetItem";
 import useEditItem from "@/hooks/items/useEditItem";
 import { useCreateConversation } from "@/hooks/conversations/useCreateConversation";
 import { useAuthContext } from "@/context/AuthContext";
+import useGetUser from "@/hooks/useGetUser";
 
 const ItemPage = () => {
   const params = useParams();
@@ -18,11 +19,14 @@ const ItemPage = () => {
   const { loading: editLoading } = useEditItem(itemId?.toString()!);
   const { makeConversation, loading: convoLoading } = useCreateConversation();
   const { authUser } = useAuthContext();
+  const { user } = useGetUser(item?.belongTo?._id);
 
   const [currentSlide, setCurrentSlide] = useState(0);
 
   useEffect(() => {
     if (itemId) getItem(itemId);
+    console.log(params);
+
   }, [itemId]);
 
   const startConvo = () => {
@@ -31,7 +35,7 @@ const ItemPage = () => {
 
     makeConversation({
       _id: belongTo._id,
-      userName: item?.userName??"",
+      userName: item?.userName ?? "",
       email: belongTo.email || "",
     });
   };
@@ -62,7 +66,7 @@ const ItemPage = () => {
   }
 
   if (!item) {
-  return (
+    return (
       <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 flex items-center justify-center">
         <div className="text-center">
           <div className="w-24 h-24 bg-gray-800/50 rounded-full flex items-center justify-center mb-6">
@@ -81,49 +85,49 @@ const ItemPage = () => {
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 text-gray-100">
       <div className="max-w-6xl mx-auto p-6 space-y-8">
         {/* Back Button */}
-        <button
+        {window.innerWidth < 1024 ? <div className=" pt-10"></div> : <button
           onClick={() => navigate(-1)}
           className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors duration-200 mb-6"
         >
           <ChevronLeft className="w-5 h-5" />
           <span>Back</span>
         </button>
-
+        }
         <div className="grid lg:grid-cols-2 gap-8">
           {/* Image Carousel */}
           <div className="space-y-4">
             {item.photo && item.photo.length > 0 ? (
               <div className="relative rounded-3xl overflow-hidden bg-black/60 backdrop-blur-xl border border-gray-700/50 shadow-2xl">
-          <div
-            className="flex transition-transform duration-500 ease-in-out"
-            style={{ transform: `translateX(-${currentSlide * 100}%)` }}
-          >
-            {item.photo.map((url, index) => (
+                <div
+                  className="flex transition-transform duration-500 ease-in-out"
+                  style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+                >
+                  {item.photo.map((url, index) => (
                     <div key={index} className="flex-shrink-0 w-full">
-                  <img
-                    src={url}
-                    alt={`${item.itemName} ${index + 1}`}
+                      <img
+                        src={url}
+                        alt={`${item.itemName} ${index + 1}`}
                         className="w-full h-96 lg:h-[500px] object-cover"
-                  />
+                      />
+                    </div>
+                  ))}
                 </div>
-            ))}
-          </div>
 
-          {/* Navigation Arrows */}
+                {/* Navigation Arrows */}
                 {item.photo.length > 1 && (
                   <>
-          <button
-            onClick={prevSlide}
+                    <button
+                      onClick={prevSlide}
                       className="absolute top-1/2 left-4 -translate-y-1/2 w-12 h-12 bg-black/60 backdrop-blur-md hover:bg-black/80 text-white rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110"
-          >
-            <ChevronLeft className="w-6 h-6" />
-          </button>
-          <button
-            onClick={nextSlide}
+                    >
+                      <ChevronLeft className="w-6 h-6" />
+                    </button>
+                    <button
+                      onClick={nextSlide}
                       className="absolute top-1/2 right-4 -translate-y-1/2 w-12 h-12 bg-black/60 backdrop-blur-md hover:bg-black/80 text-white rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110"
-          >
-            <ChevronRight className="w-6 h-6" />
-          </button>
+                    >
+                      <ChevronRight className="w-6 h-6" />
+                    </button>
                   </>
                 )}
 
@@ -134,11 +138,10 @@ const ItemPage = () => {
                       <button
                         key={index}
                         onClick={() => setCurrentSlide(index)}
-                        className={`w-3 h-3 rounded-full transition-all duration-200 ${
-                          index === currentSlide 
-                            ? "bg-white scale-110" 
-                            : "bg-white/50 hover:bg-white/70"
-                        }`}
+                        className={`w-3 h-3 rounded-full transition-all duration-200 ${index === currentSlide
+                          ? "bg-white scale-110"
+                          : "bg-white/50 hover:bg-white/70"
+                          }`}
                       />
                     ))}
                   </div>
@@ -152,58 +155,63 @@ const ItemPage = () => {
                   </svg>
                   <p className="text-gray-500">No images available</p>
                 </div>
-        </div>
-      )}
+              </div>
+            )}
           </div>
 
           {/* Item Details */}
           <div className="space-y-6">
             <div className="bg-black/60 backdrop-blur-xl p-8 rounded-3xl border border-gray-700/50 shadow-2xl">
-              <div className="space-y-4">
+              <div className="space-y-4 py-3">
                 <h1 className="text-4xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
                   {item.itemName}
                 </h1>
-                
+
                 <div className="flex items-center gap-4">
                   <span className="text-3xl font-bold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
                     ₹{item.price.toLocaleString()}
                   </span>
                 </div>
 
-                <div className="flex items-center gap-3 py-4 border-y border-gray-700/50">
-                  <div className="w-12 h-12 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full flex items-center justify-center text-lg font-bold text-white">
-                    {item.userName.charAt(0).toUpperCase()}
+                <div className="flex items-center gap-3 py-4 border-t border-gray-700/50">
+                 <p className="text-white font-semibold">Seller :</p>
+                  <div><p className="text-white font-semibold">{item.userName}</p>
+            
                   </div>
-                  <div>
-                    <p className="text-gray-300 font-medium">Seller</p>
-                    <p className="text-white font-semibold">{item.userName}</p>
+                </div>
+
+                <div className="flex items-center gap-1 py-3 text-lg border-t border-gray-700/50">
+
+                  <p className="text-white font-semibold">Contact :</p>
+                  <div>{"+91\t" + item.phoneNumber}
                   </div>
                 </div>
 
                 {item.description && (
-                  <div className="space-y-2">
-                    <h3 className="text-lg font-semibold text-gray-300">Description</h3>
+                  <div className="space-y-2 flex flex-col items-start border-t border-gray-700/50 py-3">
+                    <h3 className="text-lg font-semibold text-gray-300 border-b-white">Description</h3>
                     <p className="text-gray-200 leading-relaxed">{item.description}</p>
                   </div>
                 )}
+
               </div>
             </div>
 
-      {/* Action Buttons */}
-      <div className="flex gap-4">
-        {authUser?._id !== item.belongTo._id ? (
-          <button
-            onClick={startConvo}
+            {/* Action Buttons */}
+            <div className="flex gap-4">
+              {authUser?._id !== item.belongTo._id ? (
+                <button
+                  onClick={startConvo}
                   disabled={convoLoading}
                   className="flex-1 px-8 py-4 rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold shadow-lg transition-all duration-200 hover:scale-[1.02] hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-          >
+                >
                   {convoLoading ? (
                     <>
                       <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
                       Loading...
                     </>
-        ) : (
-          <>
+                  ) : (
+                    <>
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                       </svg>
@@ -213,11 +221,11 @@ const ItemPage = () => {
                 </button>
               ) : (
                 <div className="flex gap-4 w-full">
-            <button
-              onClick={editItem}
+                  <button
+                    onClick={editItem}
                     disabled={editLoading}
                     className="flex-1 px-8 py-4 rounded-2xl bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold shadow-lg transition-all duration-200 hover:scale-[1.02] hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-            >
+                  >
                     {editLoading ? (
                       <>
                         <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
@@ -229,8 +237,8 @@ const ItemPage = () => {
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                         </svg>
                         Edit Item
-          </>
-        )}
+                      </>
+                    )}
                   </button>
                   <div className="flex-1">
                     <DeleteItemButton itemId={itemId!} />

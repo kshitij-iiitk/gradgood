@@ -10,6 +10,6 @@ router.get("/conversation/:id", protectedroute, getUserConversation);
 router.post("/create/:id", protectedroute, makeConversation);
 router.delete("/delete/:id", protectedroute, deleteConversation);
 router.put("/edit/:id", protectedroute, editUser);
-router.put("/:id", protectedroute, getUser);
+router.get("/:id", protectedroute, getUser);
 
 export default router;

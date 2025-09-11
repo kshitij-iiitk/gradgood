@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 import useGetItems from "@/hooks/items/useGetItems";
 import { useAuthContext } from "@/context/AuthContext";
+import useGetUser from "@/hooks/useGetUser";
 
 const fallbackImage = "https://via.placeholder.com/300x200.png?text=No+Image";
 
@@ -13,6 +14,7 @@ const Marketplace = () => {
   const { authUser } = useAuthContext();
   const { items, loading, refetch } = useGetItems();
   const navigate = useNavigate();
+
 
   const [search, setSearch] = useState("");
 
@@ -111,13 +113,13 @@ const Marketplace = () => {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {filteredItems.map((item) => (
-            <div
-              key={item._id}
+              <div
+                key={item._id}
                 className="group cursor-pointer rounded-3xl bg-black/60 backdrop-blur-xl border border-gray-700/50 
                            hover:border-indigo-500/50 hover:shadow-2xl hover:shadow-indigo-500/10 
                            transform hover:scale-[1.02] transition-all duration-300 overflow-hidden"
-              onClick={() => navigate(`/market/${item._id}`)}
-            >
+                onClick={() => navigate(`/market/${item._id}`)}
+              >
                 {/* Image */}
                 <div className="relative overflow-hidden rounded-t-3xl">
                   <LazyLoadImage
@@ -150,7 +152,7 @@ const Marketplace = () => {
                 </div>
               </div>
             ))}
-            </div>
+          </div>
         )}
       </div>
     </div>

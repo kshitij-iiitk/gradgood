@@ -74,7 +74,6 @@ const Profile = () => {
                 className="w-32 h-32 rounded-full object-cover border-4 border-gray-600/50 shadow-xl"
               draggable="false"
             />
-              <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-green-500 rounded-full border-4 border-gray-900"></div>
             </div>
             
             <div className="space-y-4">

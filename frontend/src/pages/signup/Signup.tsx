@@ -25,7 +25,7 @@ export default function Signup() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 relative overflow-hidden">
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 relative overflow-hidden px-2">
       {/* Background decorative elements */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-indigo-500/10 rounded-full blur-3xl"></div>
@@ -35,68 +35,54 @@ export default function Signup() {
 
       <div className="w-full max-w-lg p-8 rounded-3xl bg-black/70 backdrop-blur-xl border border-gray-700/50 shadow-2xl relative z-10 transform hover:scale-[1.01] transition-all duration-300">
         <div className="text-center mb-8">
-          <div className="mx-auto w-16 h-16 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center mb-4">
-            <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
-            </svg>
-          </div>
-          <h2 className="text-3xl font-bold text-gray-100 mb-2 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+          <h2 className="text-3xl font-bold  mb-2 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
             Create Account
           </h2>
-          <p className="text-gray-400 text-sm">Join GradGoods with your college email</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* College Email */}
           <div className="space-y-2">
-            <label htmlFor="email" className="text-sm font-medium text-gray-300 block">
-              College Email
-            </label>
+
             <input
               id="email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="your.email@college.edu"
+              placeholder="nameXXAAAXXX@iiitkottayam.ac.in"
               className="w-full px-4 py-3 rounded-xl bg-gray-900/50 text-gray-100 border border-gray-600 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 hover:border-gray-500"
               required
             />
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="phoneNumber" className="text-sm font-medium text-gray-300 block">
-              Phone Number
-            </label>
+           
             <input
               id="phoneNumber"
               type="tel"
               value={phoneNumber}
               onChange={(e) => setPhoneNumber(e.target.value)}
-              placeholder="+1 (555) 123-4567"
+              placeholder="Phone Number"
               className="w-full px-4 py-3 rounded-xl bg-gray-900/50 text-gray-100 border border-gray-600 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 hover:border-gray-500"
               required
             />
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="gPayID" className="text-sm font-medium text-gray-300 block">
-              GPay ID
-            </label>
+          
             <input
               id="gPayID"
               type="text"
               value={gPayID}
               onChange={(e) => setGPayID(e.target.value)}
-              placeholder="your-gpay-id"
+              placeholder="your-upi-id"
               className="w-full px-4 py-3 rounded-xl bg-gray-900/50 text-gray-100 border border-gray-600 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 hover:border-gray-500"
               required
             />
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="password" className="text-sm font-medium text-gray-300 block">
-              Password
-            </label>
+        
             <input
               id="password"
               type="password"
@@ -109,9 +95,7 @@ export default function Signup() {
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-300 block">
-              Profile Picture
-            </label>
+          
             <label
               htmlFor="photo"
               className="cursor-pointer flex items-center justify-center px-4 py-3 bg-gray-900/50 border border-gray-600 border-dashed rounded-xl text-gray-300 text-center hover:bg-gray-800/50 hover:border-gray-500 transition-all duration-200 group"
@@ -120,7 +104,7 @@ export default function Signup() {
                 <svg className="w-5 h-5 text-gray-400 group-hover:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                 </svg>
-              {photo ? "Change Profile Picture" : "Upload Profile Picture"}
+                {photo ? "Change Profile Picture" : "Upload Profile Picture"}
               </div>
             </label>
             <input
