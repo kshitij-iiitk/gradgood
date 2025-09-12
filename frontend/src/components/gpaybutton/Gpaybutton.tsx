@@ -1,21 +1,13 @@
+// GPayButton.tsx
 "use client";
 
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import toast from "react-hot-toast";
-import PaymentQRModal from "./PaymentQR";
-
-interface Transaction {
-  id: string;
-  fromUser: string;
-  toUser: { name: string; upiId: string };
-  amount: number;
-  upiId: string;
-  status: "pending" | "completed";
-}
+import PaymentQRModal, { type Transaction } from "./PaymentQR";
 
 interface GPayButtonProps {
-  transaction: Transaction;
+  transaction: Transaction;``
   onConfirmPayment: (id: string) => Promise<void>;
 }
 
@@ -24,23 +16,26 @@ export default function GPayButton({ transaction, onConfirmPayment }: GPayButton
   const [isQRModalOpen, setIsQRModalOpen] = useState(false);
   const [hasInitiatedPayment, setHasInitiatedPayment] = useState(false);
 
-  const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+  const isMobile = typeof navigator !== "undefined" && /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
   const handlePayClick = () => {
-    if (!transaction.upiId) {
+    const upiIdToUse = transaction.upiId ?? transaction.toUser.upiId;
+    if (!upiIdToUse) {
       toast.error("No UPI ID available");
       return;
     }
 
-    const upiLink = `upi://pay?pa=${transaction.upiId}&pn=${encodeURIComponent(
-      transaction.toUser?.name || "Receiver"
+    const upiLink = `upi://pay?pa=${encodeURIComponent(upiIdToUse)}&pn=${encodeURIComponent(
+      transaction.toUser.name
     )}&am=${transaction.amount}&cu=INR`;
 
-    setHasInitiatedPayment(true); // ✅ trigger confirm button display
+    setHasInitiatedPayment(true);
 
     if (isMobile) {
+      // mobile: redirect to UPI app
       window.location.href = upiLink;
     } else {
+      // desktop: show QR modal (modal will build the same URI itself)
       setIsQRModalOpen(true);
     }
   };
@@ -50,8 +45,8 @@ export default function GPayButton({ transaction, onConfirmPayment }: GPayButton
       setLoading(true);
       await onConfirmPayment(transaction.id);
       toast.success("Payment confirmed!");
-      setIsQRModalOpen(false); // close modal if open
-    } catch (error) {
+      setIsQRModalOpen(false);
+    } catch {
       toast.error("Failed to confirm payment");
     } finally {
       setLoading(false);
@@ -60,31 +55,21 @@ export default function GPayButton({ transaction, onConfirmPayment }: GPayButton
 
   return (
     <>
-      {/* Show Pay button initially, switch to Confirm after click */}
       {!hasInitiatedPayment ? (
-        <button
-          onClick={handlePayClick}
-          disabled={loading}
-          className="px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-600 text-white font-medium flex items-center justify-center space-x-2 transition-all duration-200 disabled:opacity-50"
-        >
-          {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <span>Pay with GPay</span>}
+        <button onClick={handlePayClick} className="px-4 py-2 rounded-lg bg-blue-500 text-white" disabled={loading}>
+          {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Pay with GPay"}
         </button>
       ) : (
         transaction.status === "pending" && (
-          <button
-            onClick={handleConfirmPayment}
-            disabled={loading}
-            className="mt-2 px-4 py-2 rounded-lg bg-green-500 hover:bg-green-600 text-white font-medium flex items-center justify-center space-x-2 transition-all duration-200 disabled:opacity-50"
-          >
+          <button onClick={handleConfirmPayment} className="mt-2 px-4 py-2 rounded-lg bg-green-500 text-white" disabled={loading}>
             {loading ? "Confirming..." : "I have Paid"}
           </button>
         )
       )}
 
-      {/* QR Modal for Desktop */}
       {isQRModalOpen && (
         <PaymentQRModal
-          transaction={transaction}
+          transaction={transaction}    // modal will use transaction.upiId
           loading={loading}
           onClose={() => setIsQRModalOpen(false)}
           onConfirmPayment={handleConfirmPayment}

@@ -1,6 +1,6 @@
 "use client";
 
-import { MessageCircle, Users, Sparkles } from "lucide-react";
+import { MessageCircle, Sparkles } from "lucide-react";
 
 const NoChatSelected = () => {
   return (
