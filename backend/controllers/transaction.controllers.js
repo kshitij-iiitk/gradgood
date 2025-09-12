@@ -49,12 +49,10 @@ export const confirmTransaction= async (req, res) => {
     const tx = await Transaction.findById(id);
     if (!tx) return res.status(404).json({ error: "Transaction not found" });
 
-    // If transaction is already completed
     if (tx.status === "completed") {
       return res.status(400).json({ error: "Transaction already completed" });
     }
 
-    // Mark item as sold if itemId exists
     if (tx.itemId) {
       const item = await Item.findById(tx.itemId);
       if (!item) return res.status(404).json({ error: "Item not found" });
@@ -64,7 +62,6 @@ export const confirmTransaction= async (req, res) => {
       await item.save();
     }
 
-    // Update transaction status
     tx.status = "completed";
     await tx.save();
 

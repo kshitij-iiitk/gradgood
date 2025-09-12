@@ -5,10 +5,7 @@ import { MessageCircle, Users, Sparkles } from "lucide-react";
 const NoChatSelected = () => {
   return (
     <div className="flex flex-col items-center justify-center h-full min-h-[60vh] relative overflow-hidden">
-      {/* Background effects */}
-      <div className="absolute inset-0 bg-gradient-to-br from-slate-900/95 via-slate-800/90 to-slate-900/95 backdrop-blur-xl" />
-      <div className="absolute inset-0 bg-gradient-to-t from-blue-900/10 via-transparent to-purple-900/10" />
-      
+     
       {/* Animated background elements */}
       <div className="absolute inset-0 opacity-20">
         <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-blue-500/20 rounded-full blur-2xl animate-pulse" />
@@ -39,22 +36,10 @@ const NoChatSelected = () => {
             No Chat Selected
           </h2>
           
-          <p className="text-gray-400 text-lg leading-relaxed">
-            Choose a conversation from your inbox to start messaging
-          </p>
-          
-          <div className="flex items-center justify-center space-x-2 text-sm text-gray-500 mt-6">
-            <Users className="w-4 h-4" />
-            <span>Select a contact to begin chatting</span>
-          </div>
+         
         </div>
 
-        {/* Decorative elements */}
-        <div className="flex justify-center space-x-2 mt-8">
-          <div className="w-2 h-2 bg-blue-400/60 rounded-full animate-ping" />
-          <div className="w-2 h-2 bg-purple-400/60 rounded-full animate-ping animation-delay-300" />
-          <div className="w-2 h-2 bg-cyan-400/60 rounded-full animate-ping animation-delay-600" />
-        </div>
+       
       </div>
     </div>
   );

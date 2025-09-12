@@ -11,12 +11,12 @@ export const getUserConversations = async (req, res) => {
     let conversations = await Conversation.find({
       participants: userId,
     })
-      .populate("participants", "userName email phoneNumber profilePic")
+      .populate("participants", "userName email phoneNumber profilePic upiId")
       .populate({
         path: "messages",
         populate: {
           path: "senderId receiverId",
-          select: "userName email phoneNumber profilePic",
+          select: "userName email phoneNumber profilePic upiId",
         },
       });
 
@@ -52,12 +52,12 @@ export const getUserConversation = async (req, res) => {
     );
 
     const conversation = await Conversation.findOne({ participants })
-      .populate("participants", "userName email phoneNumber  profilePic")
+      .populate("participants", "userName email phoneNumber  profilePic upiId")
       .populate({
         path: "messages",
         populate: {
           path: "senderId receiverId",
-          select: "userName email phoneNumber profilePic",
+          select: "userName email phoneNumber profilePic upiId",
         },
       });
 

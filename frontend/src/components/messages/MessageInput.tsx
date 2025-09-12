@@ -5,7 +5,8 @@ import { Button } from "@/components/ui/button";
 import useConversation from "@/zustand/useConversation";
 import GPayButton from "../gpaybutton/Gpaybutton";
 import useSendMessage from "@/hooks/messages/useSendMessage";
-import { Send, Smile, Paperclip, Mic, CreditCard } from "lucide-react";
+import { Send } from "lucide-react";
+import { useAuthContext } from "@/context/AuthContext";
 
 export default function MessageInput() {
   const [text, setText] = useState("");
@@ -13,6 +14,12 @@ export default function MessageInput() {
   const { selectedConversation } = useConversation();
   const { sendMessage, loading } = useSendMessage();
   const inputRef = useRef<HTMLInputElement>(null);
+  const { authUser } = useAuthContext();
+
+  const otherParticipant = selectedConversation?.participants.find(
+    (p) => p._id !== authUser?._id
+  );
+  
 
   const isNumber = /^\d+$/.test(text.trim());
 
@@ -54,62 +61,49 @@ export default function MessageInput() {
           <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-blue-500/10 to-purple-500/10 -z-10" />
         )}
 
-        {/* Attachment button */}
-        <button className="p-2 rounded-xl bg-white/10 hover:bg-white/20 transition-all duration-300 group">
-          <Paperclip className="w-5 h-5 text-white/70 group-hover:text-white group-hover:rotate-12 transition-all" />
-        </button>
+
 
         {/* Text input */}
         <div className="flex-1 relative">
-      <input
+          <input
             ref={inputRef}
-        type="text"
+            type="text"
             className="w-full bg-transparent text-white placeholder-white/50 focus:outline-none text-base py-2 px-1"
             placeholder={isNumber ? "Enter amount to pay..." : "Type a message..."}
-        value={text}
-        onChange={(e) => setText(e.target.value)}
+            value={text}
+            onChange={(e) => setText(e.target.value)}
             onKeyDown={handleKeyPress}
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
           />
-
-          {/* Input type indicator */}
-          {isNumber && (
-            <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center space-x-1">
-              <CreditCard className="w-4 h-4 text-green-400" />
-              <span className="text-xs text-green-400 font-medium">Payment</span>
-            </div>
-          )}
         </div>
 
-        {/* Emoji button */}
-        <button className="p-2 rounded-xl bg-white/10 hover:bg-white/20 transition-all duration-300 group">
-          <Smile className="w-5 h-5 text-white/70 group-hover:text-yellow-400 group-hover:scale-110 transition-all" />
-        </button>
 
-        {/* Voice message button */}
-        <button className="p-2 rounded-xl bg-white/10 hover:bg-white/20 transition-all duration-300 group">
-          <Mic className="w-5 h-5 text-white/70 group-hover:text-red-400 group-hover:scale-110 transition-all" />
-        </button>
+
+
 
         {/* Send/Pay button */}
-      {isNumber ? (
+        {isNumber ? (
           <div className="relative">
-        <GPayButton
-              fromUser="me"
-          toUser={{
-                name: selectedConversation?.participants.find(
-              (p) => p._id !== selectedConversation.participants[0]._id
-                )?.userName || "User",
-                upiId: selectedConversation?.participants.find(
-              (p) => p._id !== selectedConversation.participants[0]._id
-                )?.upiID || "User" ,
-          }}
-          amount={parseInt(text, 10)}
-          onPaymentSuccess={handlePaymentSuccess}
-        />
+            <GPayButton
+              transaction={{
+                id: crypto.randomUUID(), // generate temporary ID
+                fromUser: authUser?._id || "me",
+                toUser: {
+                  name: otherParticipant?.userName || "User",
+                  upiId: otherParticipant?.upiId || "user@upi",
+                },
+                amount: parseInt(text, 10),
+                upiId: otherParticipant?.upiId || "user@upi",
+                status: "pending",
+              }}
+              onConfirmPayment={async (_id: string) => {
+                handlePaymentSuccess(`Paid ₹${text} to ${otherParticipant?.userName}`);
+              }}
+            />
+
           </div>
-      ) : (
+        ) : (
           <Button
             onClick={handleSend}
             disabled={loading || !text.trim()}
@@ -129,13 +123,12 @@ export default function MessageInput() {
             {loading ? (
               <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
             ) : (
-              <Send className={`w-5 h-5 transition-all duration-300 ${
-                text.trim() ? 'text-white group-hover:translate-x-0.5' : 'text-white/50'
+              <Send className={`w-5 h-5 transition-all duration-300 ${text.trim() ? 'text-white group-hover:translate-x-0.5' : 'text-white/50'
                 }`} />
             )}
-        </Button>
-      )}
-    </div>
+          </Button>
+        )}
+      </div>
 
       {/* Typing indicator placeholder */}
       {isFocused && (

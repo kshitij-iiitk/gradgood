@@ -3,7 +3,7 @@
 import { type Message as MessageType } from "@/types/message";
 import { useAuthContext } from "@/context/AuthContext";
 import { extractTime } from "@/utils/extractTime";
-import { Check, CheckCheck, CreditCard } from "lucide-react";
+import {  CheckCheck, CreditCard } from "lucide-react";
 
 interface Props {
   message: MessageType;

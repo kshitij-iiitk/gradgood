@@ -8,18 +8,19 @@ import useGetItem from "@/hooks/items/useGetItem";
 import useEditItem from "@/hooks/items/useEditItem";
 import { useCreateConversation } from "@/hooks/conversations/useCreateConversation";
 import { useAuthContext } from "@/context/AuthContext";
-import useGetUser from "@/hooks/useGetUser";
+
 
 const ItemPage = () => {
   const params = useParams();
   const navigate = useNavigate();
   const itemId = params.id;
+  const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
   const { item, loading: itemLoading, getItem } = useGetItem();
   const { loading: editLoading } = useEditItem(itemId?.toString()!);
   const { makeConversation, loading: convoLoading } = useCreateConversation();
   const { authUser } = useAuthContext();
-  const { user } = useGetUser(item?.belongTo?._id);
+
 
   const [currentSlide, setCurrentSlide] = useState(0);
 
@@ -85,7 +86,7 @@ const ItemPage = () => {
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 text-gray-100">
       <div className="max-w-6xl mx-auto p-6 space-y-8">
         {/* Back Button */}
-        {window.innerWidth < 1024 ? <div className=" pt-10"></div> : <button
+        {isMobile ? <div className=" pt-10"></div> : <button
           onClick={() => navigate(-1)}
           className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors duration-200 mb-6"
         >

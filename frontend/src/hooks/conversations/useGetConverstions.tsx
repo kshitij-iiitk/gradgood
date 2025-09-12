@@ -17,6 +17,8 @@ const useGetConversations = () => {
 
       const data: Conversation[] = await res.json();
       setConversations(data);
+      console.log(data);
+      
       
 
     } catch (err: any) {

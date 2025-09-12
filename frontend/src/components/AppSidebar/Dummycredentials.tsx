@@ -1,4 +1,4 @@
-import { Copy, Eye, EyeOff, Key, User } from "lucide-react";
+import { Copy, Eye, EyeOff} from "lucide-react";
 import { useState } from "react";
 
 const DummyCredentials = () => {

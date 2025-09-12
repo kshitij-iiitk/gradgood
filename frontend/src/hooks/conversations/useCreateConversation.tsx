@@ -1,3 +1,6 @@
+// src/hooks/conversations/useCreateConversation.tsx(39,9): error TS2739: Type '{ _id: string; userName: string; rollNumber: string; email?: string | undefined; profilePic?: string | undefined; token?: string | undefined; upiId: string; phoneNumber?: string | undefined; }' is missing the following properties from type '{ name: any; email: any; _id: string; userName?: string | undefined; profilePic: string; upiID: string; }': name, upiID
+// src/hooks/conversations/useCreateConversation.tsx(40,9): error TS2739: Type '{ email?: string | undefined; _id: string; userName: string; profilePic?: string | undefined; }' is missing the following properties from type '{ name: any; email: any; _id: string; userName?: string | undefined; profilePic: string; upiID: string; }': name, upiID
+
 import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
@@ -13,6 +16,7 @@ interface ConversationResponse {
   createdAt: string;
   updatedAt: string;
 }
+
 
 export const useCreateConversation = () => {
   const [loading, setLoading] = useState(false);
@@ -36,8 +40,20 @@ export const useCreateConversation = () => {
     const optimisticConversation: FrontendConversation = {
       _id: "temp-" + Date.now(),
       participants: [
-        { ...authUser },
-        { ...receiverData },
+        {
+          _id: authUser._id,
+          userName: authUser.userName,
+          email: authUser.email ?? "",
+          profilePic: authUser.profilePic ?? "",
+          upiId: authUser.upiId ?? "",
+        },
+        {
+          _id: receiverData._id,
+          userName: receiverData.userName,
+          email: receiverData.email ?? "",
+          profilePic: receiverData.profilePic ?? "",
+          upiId: (receiverData as any).upiId ?? "", 
+        },
       ],
       messages: [],
       createdAt: new Date().toISOString(),

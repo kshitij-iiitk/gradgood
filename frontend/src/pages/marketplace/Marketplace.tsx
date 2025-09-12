@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 import useGetItems from "@/hooks/items/useGetItems";
 import { useAuthContext } from "@/context/AuthContext";
-import useGetUser from "@/hooks/useGetUser";
+
 
 const fallbackImage = "https://via.placeholder.com/300x200.png?text=No+Image";
 
@@ -14,6 +14,7 @@ const Marketplace = () => {
   const { authUser } = useAuthContext();
   const { items, loading, refetch } = useGetItems();
   const navigate = useNavigate();
+  const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
 
   const [search, setSearch] = useState("");
@@ -36,29 +37,31 @@ const Marketplace = () => {
         <h1 className="text-4xl font-bold bg-gradient-to-r from-white via-gray-200 to-gray-400 bg-clip-text text-transparent mb-2">
           Marketplace
         </h1>
-        <p className="text-gray-400 text-lg">
-          Discover amazing items from your fellow students
-        </p>
+
       </div>
 
-      {/* Search bar */}
       <div className="flex justify-center mb-8">
-        <div className="flex flex-col sm:flex-row gap-3 w-full max-w-2xl">
+        <div
+          className={`flex ${isMobile ? "flex-row" : "flex-col sm:flex-row"
+            } gap-3 w-full max-w-2xl`}
+        >
           <input
             type="text"
             placeholder="Search items..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="flex-1 px-6 py-4 rounded-2xl bg-black/60 backdrop-blur-xl text-gray-200 border border-gray-600/50 
-                       placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 
-                       focus:border-indigo-500/50 transition-all duration-300 hover:border-gray-500/70 shadow-lg"
+                     placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 
+                     focus:border-indigo-500/50 transition-all duration-300 hover:border-gray-500/70 shadow-lg"
           />
           <button
             onClick={() => refetch()}
-            className="px-8 py-4 rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 
-                       text-white font-semibold transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-[1.02] 
-                       flex items-center justify-center gap-2 min-w-[120px]"
+            className={`${isMobile
+                ? "px-4 py-4 rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-[1.02] flex items-center justify-center"
+                : "px-8 py-4 rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-[1.02] flex items-center justify-center gap-2 min-w-[120px]"
+              }`}
           >
+            {/* Icon always visible */}
             <svg
               className="w-5 h-5"
               fill="none"
@@ -72,11 +75,11 @@ const Marketplace = () => {
                 d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
               />
             </svg>
-            <span className="hidden sm:inline">Search</span>
+            {/* Show text only on non-mobile */}
+            {!isMobile && <span className="hidden sm:inline">Search</span>}
           </button>
         </div>
       </div>
-
       {/* Items grid */}
       <div className="max-w-7xl mx-auto">
         {loading ? (
