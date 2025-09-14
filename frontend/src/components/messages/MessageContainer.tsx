@@ -30,10 +30,10 @@ const MessageContainer = () => {
   }
 
   return (
-    <div className="flex flex-col h-full bg-gradient-to-br from-slate-900/95 via-slate-800/90 to-slate-900/95 backdrop-blur-xl border border-white/10 shadow-2xl overflow-hidden rounded-2xl">
+    <div className="flex flex-col bg-gradient-to-br from-slate-900/95 via-slate-800/90 to-slate-900/95 backdrop-blur-xl overflow-hidden lg:rounded-2xl">
 
       {/* Messages Area */}
-      <div className="flex-1 overflow-y-auto px-4 py-6 space-y-5 scrollbar-hide relative">
+      <div className="flex-1 overflow-y-auto px-4 py-6 space-y-5 scrollbar-hide relative hide-scrollbar">
         {/* Background pattern */}
         <div className="absolute inset-0 opacity-5">
           <div

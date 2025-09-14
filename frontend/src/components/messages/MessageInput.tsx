@@ -11,6 +11,15 @@ import { useAuthContext } from "@/context/AuthContext";
 export default function MessageInput() {
   const [text, setText] = useState("");
   const [isFocused, setIsFocused] = useState(false);
+  const [transaction, setTransaction] = useState<null | {
+    id: string;
+    fromUser: string;
+    toUser: { name: string; upiId: string };
+    amount: number;
+    upiId: string;
+    status: "pending" | "completed";
+  }>(null);
+
   const { selectedConversation } = useConversation();
   const { sendMessage, loading } = useSendMessage();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -19,7 +28,6 @@ export default function MessageInput() {
   const otherParticipant = selectedConversation?.participants.find(
     (p) => p._id !== authUser?._id
   );
-  
 
   const isNumber = /^\d+$/.test(text.trim());
 
@@ -30,64 +38,54 @@ export default function MessageInput() {
     inputRef.current?.focus();
   };
 
-  const handlePaymentSuccess = (msg: string) => {
-    if (!selectedConversation) return;
-    sendMessage(msg);
-    setText("");
-  };
+  const handlePaymentConfirmed = async (id: string) => {
+    // Call your API to mark transaction complete
+    await fetch(`/api/transactions/confirm/${id}`, { method: "PATCH" });
 
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      if (!isNumber) {
-        handleSend();
-      }
-    }
+    setTransaction((prev) =>
+      prev ? { ...prev, status: "completed" } : prev
+    );
+
+    await sendMessage(
+      `Paid ₹${transaction?.amount} to ${otherParticipant?.userName}`
+    );
+    setText("");
   };
 
   return (
     <div className="relative">
-      {/* Input container with glassmorphism */}
-      <div className={`
-        relative flex items-center gap-3 p-3 rounded-2xl transition-all duration-300
-        ${isFocused
-          ? 'bg-gradient-to-r from-white/15 to-white/10 border-2 border-blue-400/50 shadow-lg shadow-blue-500/20'
-          : 'bg-gradient-to-r from-white/10 to-white/5 border border-white/20 hover:border-white/30'
-        }
-        backdrop-blur-sm
-      `}>
-        {/* Background glow effect */}
-        {isFocused && (
-          <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-blue-500/10 to-purple-500/10 -z-10" />
-        )}
-
-
-
-        {/* Text input */}
+      <div
+        className={`
+          relative flex items-center gap-3 p-3 rounded-2xl transition-all duration-300
+          ${
+            isFocused
+              ? "bg-gradient-to-r from-white/15 to-white/10 border-2 border-blue-400/50 shadow-lg shadow-blue-500/20"
+              : "bg-gradient-to-r from-white/10 to-white/5 border border-white/20 hover:border-white/30"
+          }
+          backdrop-blur-sm
+        `}
+      >
         <div className="flex-1 relative">
           <input
             ref={inputRef}
             type="text"
             className="w-full bg-transparent text-white placeholder-white/50 focus:outline-none text-base py-2 px-1"
-            placeholder={isNumber ? "Enter amount to pay..." : "Type a message..."}
+            placeholder={
+              isNumber ? "Enter amount to pay..." : "Type a message..."
+            }
             value={text}
             onChange={(e) => setText(e.target.value)}
-            onKeyDown={handleKeyPress}
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
           />
         </div>
 
-
-
-
-
-        {/* Send/Pay button */}
+        {/* Send or Pay Button */}
         {isNumber ? (
-          <div className="relative">
-            <GPayButton
-              transaction={{
-                id: crypto.randomUUID(), // generate temporary ID
+          <GPayButton
+            transaction={
+              transaction ?? {
+                id: crypto.randomUUID(),
                 fromUser: authUser?._id || "me",
                 toUser: {
                   name: otherParticipant?.userName || "User",
@@ -96,46 +94,38 @@ export default function MessageInput() {
                 amount: parseInt(text, 10),
                 upiId: otherParticipant?.upiId || "user@upi",
                 status: "pending",
-              }}
-              onConfirmPayment={async (_id: string) => {
-                handlePaymentSuccess(`Paid ₹${text} to ${otherParticipant?.userName}`);
-              }}
-            />
-
-          </div>
+              }
+            }
+            setTransaction={setTransaction}
+            onConfirmPayment={handlePaymentConfirmed}
+          />
         ) : (
           <Button
             onClick={handleSend}
             disabled={loading || !text.trim()}
             className={`
               relative p-3 rounded-xl transition-all duration-300 border-0 overflow-hidden group
-              ${text.trim() && !loading
-                ? 'bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 hover:scale-105'
-                : 'bg-white/10 hover:bg-white/20 text-white/50'
+              ${
+                text.trim() && !loading
+                  ? "bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 hover:scale-105"
+                  : "bg-white/10 hover:bg-white/20 text-white/50"
               }
             `}
           >
-            {/* Button glow effect */}
-            {text.trim() && !loading && (
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-400/20 to-purple-400/20 blur-sm -z-10" />
-            )}
-
             {loading ? (
               <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
             ) : (
-              <Send className={`w-5 h-5 transition-all duration-300 ${text.trim() ? 'text-white group-hover:translate-x-0.5' : 'text-white/50'
-                }`} />
+              <Send
+                className={`w-5 h-5 transition-all duration-300 ${
+                  text.trim()
+                    ? "text-white group-hover:translate-x-0.5"
+                    : "text-white/50"
+                }`}
+              />
             )}
           </Button>
         )}
       </div>
-
-      {/* Typing indicator placeholder */}
-      {isFocused && (
-        <div className="absolute -bottom-6 left-4 text-xs text-white/40">
-          {isNumber ? "💳 Payment mode active" : "💬 Type your message"}
-        </div>
-      )}
     </div>
   );
 }

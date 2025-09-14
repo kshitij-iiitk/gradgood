@@ -9,7 +9,17 @@ export const createTransaction = async (req, res) => {
       return res.status(400).json({ error: "Missing required fields" });
     }
 
-    // Generate UPI link
+    const existingTx = await Transaction.findOne({
+      fromUser,
+      "toUser.upiId": toUser.upiId,
+      itemId,
+    });
+
+    if (existingTx) {
+      console.log("Existing transaction found:", existingTx._id);
+      return res.status(200).json(existingTx);
+    }
+
     const upiLink = `upi://pay?pa=${toUser.upiId}&pn=${encodeURIComponent(
       toUser.name
     )}&am=${amount}&cu=INR`;
@@ -22,13 +32,13 @@ export const createTransaction = async (req, res) => {
       upiLink,
     });
 
+    console.log("Transaction created:", transaction._id);
     res.status(201).json(transaction);
   } catch (err) {
     console.error("Failed to create transaction:", err);
     res.status(500).json({ error: "Failed to create transaction" });
   }
-}
-
+};
 
 export const getTransaction=  async (req, res) => {
   try {
@@ -63,6 +73,8 @@ export const confirmTransaction= async (req, res) => {
     }
 
     tx.status = "completed";
+    console.log("trans completed");
+    
     await tx.save();
 
     res.json(tx);

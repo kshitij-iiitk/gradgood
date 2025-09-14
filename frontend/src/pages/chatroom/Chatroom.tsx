@@ -82,7 +82,7 @@ const Chatroom = () => {
   };
 
   return (
-    <div className="h-[97vh] grid grid-cols-1 lg:grid-cols-3 bg-gradient-to-br from-gray-900 via-black to-gray-800 text-gray-100 lg:px-3">
+    <div className="h-[100vh] grid grid-cols-1 lg:grid-cols-3 bg-gradient-to-br from-gray-900 via-black to-gray-800 text-gray-100">
       {/* Desktop Conversation List */}
       <div className="hidden lg:flex flex-col border-r border-gray-700/50 overflow-y-auto p-6 space-y-3">
         <div className="mb-4">
@@ -144,7 +144,7 @@ const Chatroom = () => {
 
 
       {/* Desktop Chat Panel */}
-      <div className="hidden lg:h-[95vh] lg:flex lg:col-span-2 bg-black/60 backdrop-blur-xl border-l border-gray-700/50 rounded-r-3xl overflow-hidden">
+      <div className="hidden lg:h-[100vh] lg:flex lg:col-span-2  backdrop-blur-xl border-l-1  overflow-hidden">
         {selectedConversation ? (
           <Chat />
         ) : (
