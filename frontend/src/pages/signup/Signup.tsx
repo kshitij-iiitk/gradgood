@@ -12,7 +12,7 @@ export default function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [photo, setPhoto] = useState<File | null>(null);
-  const [gPayID, setGPayID] = useState("");
+  const [upiId, setGPayID] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -21,7 +21,7 @@ export default function Signup() {
       alert("Please upload a profile picture");
       return;
     }
-    await signup(email, password, photo, gPayID, phoneNumber);
+    await signup(email, password, photo, upiId, phoneNumber);
   };
 
   return (
@@ -71,9 +71,9 @@ export default function Signup() {
           <div className="space-y-2">
           
             <input
-              id="gPayID"
+              id="upiId"
               type="text"
-              value={gPayID}
+              value={upiId}
               onChange={(e) => setGPayID(e.target.value)}
               placeholder="your-upi-id"
               className="w-full px-4 py-3 rounded-xl bg-gray-900/50 text-gray-100 border border-gray-600 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 hover:border-gray-500"

@@ -32,7 +32,7 @@ export const useSignup = () => {
 
 
 
-  const signup = async (email: string, password: string, photo: File, gPayID: string, phoneNumber: string) => {
+  const signup = async (email: string, password: string, photo: File, upiId: string, phoneNumber: string) => {
     try {
       setLoading(true);
 
@@ -52,7 +52,7 @@ export const useSignup = () => {
           rollNumber,
           phoneNumber,
           userName,
-          gPayID,
+          upiId,
           profilePic: imageUrl,
         }),
       });
