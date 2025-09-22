@@ -54,13 +54,13 @@ export function AppSidebar() {
     if (mobileOpen) {
       // If sidebar is open, allow swiping left to close
       if (deltaX < 0) {
-        const newTranslateX = Math.max(deltaX, -256); // 256px = w-64
+        const newTranslateX = Math.max(deltaX, -256); 
         setCurrentTranslateX(newTranslateX);
       }
     } else {
       // If sidebar is closed, allow swiping right to open
       if (deltaX > 0) {
-        const newTranslateX = Math.min(deltaX - 256, 0); // Start from -256px
+        const newTranslateX = Math.min(deltaX - 256, 0); 
         setCurrentTranslateX(newTranslateX);
       }
     }
@@ -71,8 +71,7 @@ export function AppSidebar() {
     
     setIsDragging(false);
     
-    // Determine whether to open or close based on swipe distance
-    const threshold = 128; // Half of sidebar width
+    const threshold = 128; 
     
     if (mobileOpen) {
       // If open and swiped left enough, close it

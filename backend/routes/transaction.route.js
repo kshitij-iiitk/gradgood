@@ -4,15 +4,12 @@ import { createTransaction , confirmTransaction, getTransaction,getAllTransactio
 
 const router = express.Router();
 
-// Create a new transaction
 router.post("/create",protectedroute,createTransaction);
 
 router.post("/confirm/:id",protectedroute,confirmTransaction);
 
-// Get a transaction by ID
 router.get("/:id",getTransaction);
 
-// Optional: Get all transactions (for admin/testing)
 router.get("/", getAllTransactions);
 
 export default router;

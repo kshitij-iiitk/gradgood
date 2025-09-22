@@ -250,40 +250,43 @@ const ItemPage = () => {
             </div>
 
             {/* Action Buttons */}
-            <div className="flex gap-4">
-              {authUser?._id !== item.belongTo._id ? (<>{authUser?._id !== item.belongTo._id && transaction && (
-                <GPayButton
-                  transaction={transaction}
-                  setTransaction={setTransaction}
-                  onConfirmPayment={handlePaymentConfirmed}
-                />
-              )}
-
-                <button
-                  onClick={startConvo}
-                  disabled={convoLoading}
-                  className="flex-1 px-8 py-4 rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold shadow-lg transition-all duration-200 hover:scale-[1.02] hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                >
-                  {convoLoading ? (
-                    <>
-                      <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                      Loading...
-                    </>
-                  ) : (
-                    <>
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                      </svg>
-                      Start Conversation
-                    </>
+            <div className="flex flex-col sm:flex-row gap-4">
+              {authUser?._id !== item.belongTo._id ? (
+                <>
+                  {transaction && (
+                    <GPayButton
+                      transaction={transaction}
+                      setTransaction={setTransaction}
+                      onConfirmPayment={handlePaymentConfirmed}
+                    />
                   )}
-                </button></>
+
+                  <button
+                    onClick={startConvo}
+                    disabled={convoLoading}
+                    className="flex-1 px-6 py-3 rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  >
+                    {convoLoading ? (
+                      <>
+                        <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                        Loading...
+                      </>
+                    ) : (
+                      <>
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                        </svg>
+                        Start Conversation
+                      </>
+                    )}
+                  </button>
+                </>
               ) : (
-                <div className="flex gap-4 w-full">
+                <div className="flex flex-col sm:flex-row gap-4 w-full">
                   <button
                     onClick={editItem}
                     disabled={editLoading}
-                    className="flex-1 px-8 py-4 rounded-2xl bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold shadow-lg transition-all duration-200 hover:scale-[1.02] hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                    className="flex-1 px-6 py-3 rounded-2xl bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white font-semibold shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                   >
                     {editLoading ? (
                       <>
@@ -300,11 +303,14 @@ const ItemPage = () => {
                     )}
                   </button>
                   <div className="flex-1">
-                    <DeleteItemButton itemId={itemId!} />
+                    <DeleteItemButton
+                      itemId={itemId!}
+                    />
                   </div>
                 </div>
               )}
             </div>
+
           </div>
         </div>
       </div>

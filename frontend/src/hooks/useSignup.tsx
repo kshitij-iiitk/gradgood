@@ -3,7 +3,6 @@ import toast from "react-hot-toast";
 import uploadToCloudinary from "@/utils/uploadToCloudinary";
 import { useNavigate } from "react-router-dom";
 
-
 // ------------------ Roll number generator ------------------
 function transformEmail(email: string): { rollNumber: string; userName: string } {
   const username = email.split("@")[0];
@@ -63,7 +62,7 @@ export const useSignup = () => {
       toast.success("User registered successfully!");
       return data;
     } catch (err: any) {
-      console.log(err.message);
+      toast.error(err.message);
     } finally {
       setLoading(false);
     }

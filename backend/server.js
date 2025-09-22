@@ -17,7 +17,6 @@ const app = express();
 dotenv.config();
 
 const PORT = process.env.PORT || 3000;
-// Changed from the complex ES module approach to:
 const __dirname = path.resolve();
 
 

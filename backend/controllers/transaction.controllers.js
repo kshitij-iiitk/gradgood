@@ -18,7 +18,6 @@ export const createTransaction = async (req, res) => {
       toUser.name
     )}&am=${amount}&cu=INR`;
 
-    // Update existing transaction if found
     const existingTx = await Transaction.findOneAndUpdate(
       {
         fromUser,
@@ -34,7 +33,6 @@ export const createTransaction = async (req, res) => {
       return res.status(200).json(existingTx);
     }
 
-    // Otherwise, create new transaction
     const transaction = await Transaction.create({
       fromUser,
       toUser,

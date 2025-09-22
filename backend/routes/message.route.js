@@ -8,7 +8,6 @@ const router = express.Router();
 router.post("/send/:id", protectedroute, sendMessage);
 router.get("/:id", protectedroute, getMessage);
 
-// SSE endpoint
 router.get("/stream/:conversationId", async (req, res) => {
   const { conversationId } = req.params;
 
@@ -18,17 +17,14 @@ router.get("/stream/:conversationId", async (req, res) => {
     Connection: "keep-alive",
   });
 
-  // Send a heartbeat every 15 seconds to keep connection alive
   const heartbeat = setInterval(() => {
     res.write(`event: heartbeat\ndata: {}\n\n`);
   }, 15000);
 
-  // Function to send a new message
   const sendMessage = (msg) => {
     res.write(`data: ${JSON.stringify(msg)}\n\n`);
   };
 
-  // Listen to new messages in DB (simplest: poll DB every 1s)
   let lastMessageTime = new Date();
   const interval = setInterval(async () => {
     const newMessages = await Message.find({
@@ -42,7 +38,6 @@ router.get("/stream/:conversationId", async (req, res) => {
     }
   }, 1000);
 
-  // Cleanup on client disconnect
   req.on("close", () => {
     clearInterval(interval);
     clearInterval(heartbeat);

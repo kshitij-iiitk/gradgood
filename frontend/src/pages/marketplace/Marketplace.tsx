@@ -32,14 +32,7 @@ const Marketplace = () => {
 
   return (
     <div className="p-4 md:p-6 min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 text-gray-100">
-      {/* Header Section */}
-      <div className="mb-8 text-center">
-        <h1 className="text-4xl font-bold bg-gradient-to-r from-white via-gray-200 to-gray-400 bg-clip-text text-transparent mb-2">
-          Marketplace
-        </h1>
-
-      </div>
-
+     
       <div className="flex justify-center mb-8">
         <div
           className={`flex ${isMobile ? "flex-row" : "flex-col sm:flex-row"
@@ -61,7 +54,6 @@ const Marketplace = () => {
                 : "px-8 py-4 rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-[1.02] flex items-center justify-center gap-2 min-w-[120px]"
               }`}
           >
-            {/* Icon always visible */}
             <svg
               className="w-5 h-5"
               fill="none"

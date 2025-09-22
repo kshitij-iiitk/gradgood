@@ -16,7 +16,7 @@ const protectedroute = async (req, res, next) => {
     if (!user) {
       return res.status(401).json({ error: "Unauthorized access" });
     }
-    req.user = user; // Attach user to request object
+    req.user = user; 
     next();
   } catch (error) {
     console.error("Token verification failed:", error.message);

@@ -32,7 +32,9 @@ const DeleteItemButton = ({ itemId }: DeleteItemButtonProps) => {
   return (
     <Button
       variant="destructive"
-      className="text-white"
+      className="text-white text-lg w-full px-6 py-6 rounded-2xl bg-gradient-to-r from-red-500 to-pink-600 
+             hover:from-red-600 hover:to-pink-700  font-semibold 
+             shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105"
       onClick={handleDelete}
     >
       Delete

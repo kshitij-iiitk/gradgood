@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { z } from "zod";
 import { useAuthContext, type User as AuthUser } from "@/context/AuthContext";
-
+import toast from "react-hot-toast";
 // -----------------------------
 // Zod schema for login (rollNumber + password)
 // -----------------------------
@@ -69,7 +69,7 @@ const useLogin = (): UseLoginReturn => {
       setAuthUser(user);
       console.log("Logged in:", user);
     } catch (error) {
-     console.log("Login failed. Please try again.");
+     toast.error( "Login failed. Please try again.");
     } finally {
       setLoading(false);
     }

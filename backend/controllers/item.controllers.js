@@ -1,9 +1,7 @@
 import Item from "../models/item.model.js";
 import { createNotification } from "../utils/notification.js";
 
-// -----------------------------
 // Get a single item by ID
-// -----------------------------
 export const item = async (req, res) => {
   try {
     const { id } = req.params;
@@ -21,9 +19,7 @@ export const item = async (req, res) => {
   }
 };
 
-// -----------------------------
 // Get all items (exclude user’s own if needed)
-// -----------------------------
 export const items = async (req, res) => {
   try {
     const userId = req.user._id;
@@ -38,9 +34,7 @@ export const items = async (req, res) => {
   }
 };
 
-// -----------------------------
 // Upload a new item
-// -----------------------------
 export const itemsUpload = async (req, res) => {
   try {
     const userId = req.user._id;
@@ -88,9 +82,7 @@ export const itemsUpload = async (req, res) => {
   }
 };
 
-// -----------------------------
 // Edit an item (only owner can edit)
-// -----------------------------
 
 export const itemsEdit = async (req, res) => {
   try {
@@ -112,7 +104,6 @@ export const itemsEdit = async (req, res) => {
 
     await foundItem.save();
 
-    // Notify seller if item is marked sold
     if (!prevSold && sold) {
       await createNotification(foundItem.belongTo, `Your item "${foundItem.itemName}" is sold`);
     }
@@ -125,9 +116,7 @@ export const itemsEdit = async (req, res) => {
 };
 
 
-// -----------------------------
 // Delete an item (only owner can delete)
-// -----------------------------
 export const itemsDelete = async (req, res) => {
   try {
     const { id } = req.params;
