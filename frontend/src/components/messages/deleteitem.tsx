@@ -25,7 +25,7 @@ const DeleteItemButton = ({ itemId }: DeleteItemButtonProps) => {
       toast.success(data.message || "Item deleted successfully");
       navigate("/profile"); // redirect after delete
     } catch (err: any) {
-      toast.error(err.message || "Something went wrong");
+      console.log(err.message || "Something went wrong");
     }
   };
 

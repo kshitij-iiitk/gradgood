@@ -25,7 +25,7 @@ const useGetMessage = () => {
       console.log(data);
       
     } catch (error: any) {
-      toast.error(error.message || "Failed to fetch messages");
+      console.log(error.message || "Failed to fetch messages");
     } finally {
       setLoading(false);
     }

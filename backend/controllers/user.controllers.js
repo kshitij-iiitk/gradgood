@@ -8,9 +8,8 @@ export const getUserConversations = async (req, res) => {
   try {
     const userId = req.user._id.toString();
 
-    let conversations = await Conversation.find({
-      participants: userId,
-    })
+    let conversations = await Conversation.find({ participants: userId })
+      // 🔴 removed .populate("itemId")
       .populate("participants", "userName email phoneNumber profilePic upiId")
       .populate({
         path: "messages",
@@ -18,15 +17,19 @@ export const getUserConversations = async (req, res) => {
           path: "senderId receiverId",
           select: "userName email phoneNumber profilePic upiId",
         },
-      });
+      })
+      .lean(); // ✅ returns plain JS objects
 
-    conversations = conversations.map((conv) => {
-      conv.participants.sort((a, b) =>
+    // Convert itemId to string (safe even if null)
+    conversations = conversations.map((conv) => ({
+      ...conv,
+      itemId: conv.itemId?.toString() || null,
+      participants: conv.participants.sort((a, b) =>
         a._id.toString().localeCompare(b._id.toString())
-      );
-      return conv;
-    });
+      ),
+    }));
 
+    // Sort by most recent message or last updated
     const sorted = conversations.sort((a, b) => {
       const aLatest =
         a.messages[a.messages.length - 1]?.createdAt || a.updatedAt;
@@ -43,27 +46,30 @@ export const getUserConversations = async (req, res) => {
 };
 
 export const getUserConversation = async (req, res) => {
-  const { id: receiverId } = req.params;
   try {
-    const userId = req.user._id;
+    const { convoId } = req.params;
+    const userId = req.user._id.toString();
 
-    const participants = [userId.toString(), receiverId.toString()].sort(
-      (a, b) => b.localeCompare(a)
-    );
-
-    const conversation = await Conversation.findOne({ participants })
-      .populate("participants", "userName email phoneNumber  profilePic upiId")
+    const conversation = await Conversation.findOne({
+      _id: convoId,
+      participants: userId,
+    })
+      // 🔴 removed .populate("itemId")
+      .populate("participants", "userName email phoneNumber profilePic upiId")
       .populate({
         path: "messages",
         populate: {
           path: "senderId receiverId",
           select: "userName email phoneNumber profilePic upiId",
         },
-      });
+      })
+      .lean();
 
     if (!conversation) {
       return res.status(404).json({ error: "Conversation not found" });
     }
+
+    conversation.itemId = conversation.itemId?.toString() || null;
 
     res.status(200).json(conversation);
   } catch (error) {
@@ -72,19 +78,27 @@ export const getUserConversation = async (req, res) => {
   }
 };
 
+
+
 export const makeConversation = async (req, res) => {
   try {
     const userId = req.user._id;
     const { id: receiverId } = req.params;
+    const { itemId } = req.body;
+
+    if (!itemId) {
+      return res.status(400).json({ error: "itemId is required to create a conversation" });
+    }
 
     const participants = [userId.toString(), receiverId.toString()].sort(
       (a, b) => b.localeCompare(a)
     );
 
-    let conversation = await Conversation.findOne({ participants });
+    // Find conversation only for this item
+    let conversation = await Conversation.findOne({ participants, itemId });
 
     if (!conversation) {
-      conversation = new Conversation({ participants });
+      conversation = new Conversation({ participants, itemId });
       await conversation.save();
 
       await createNotification(receiverId, `New conversation started by ${req.user.userName}`);
@@ -96,6 +110,7 @@ export const makeConversation = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
 
 
 export const deleteConversation = async (req, res) => {
@@ -153,11 +168,11 @@ export const editUser = async (req, res) => {
 };
 
 
-export const getUser= async (req, res) => {
+export const getUser = async (req, res) => {
   try {
     const { id } = req.params;
-    const user = await User.findById(id).select("-password"); 
-   
+    const user = await User.findById(id).select("-password");
+
 
     if (!user) {
       return res.status(404).json({ error: "User not found" });

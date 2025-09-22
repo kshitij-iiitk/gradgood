@@ -114,7 +114,7 @@ export const itemsEdit = async (req, res) => {
 
     // Notify seller if item is marked sold
     if (!prevSold && sold) {
-      await createNotification(foundItem.belongTo, `Your item "${foundItem.itemName}" was marked as sold`);
+      await createNotification(foundItem.belongTo, `Your item "${foundItem.itemName}" is sold`);
     }
 
     res.status(200).json(foundItem);

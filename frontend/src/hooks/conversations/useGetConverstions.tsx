@@ -22,7 +22,7 @@ const useGetConversations = () => {
       
 
     } catch (err: any) {
-      toast.error(err.message || "Error fetching conversations");
+      console.log(err.message || "Error fetching conversations");
     } finally {
       setLoading(false);
     }

@@ -63,7 +63,7 @@ export const useSignup = () => {
       toast.success("User registered successfully!");
       return data;
     } catch (err: any) {
-      toast.error(err.message);
+      console.log(err.message);
     } finally {
       setLoading(false);
     }

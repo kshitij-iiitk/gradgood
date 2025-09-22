@@ -1,5 +1,4 @@
 import { useState, useEffect, useCallback } from "react";
-import toast from "react-hot-toast";
 
 export interface User {
   _id: string;
@@ -29,7 +28,7 @@ const useGetUser = (userId?: string) => {
       const data: User = await res.json();
       setUser(data);
     } catch (err: any) {
-      toast.error(err.message || "Error fetching user");
+      console.log(err.message || "Error fetching user");
     } finally {
       setLoading(false);
     }

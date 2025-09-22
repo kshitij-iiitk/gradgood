@@ -34,14 +34,14 @@
 
         const data = await res.json();
         if (data.error) {
-          toast.error(data.error);
+          console.log(data.error);
           throw new Error(data.error);
         }
 
         toast.success("Item uploaded successfully");
         return data;
       } catch (err: any) {
-        toast.error(err.message || "Failed to upload item");
+        console.log(err.message || "Failed to upload item");
       } finally {
         setLoading(false);
       }
@@ -56,13 +56,13 @@
         });
         const data = await res.json();
         if (data.error) {
-          toast.error(data.error);
+          console.log(data.error);
           throw new Error(data.error);
         }
         toast.success("Item deleted successfully");
         return true;
       } catch (err: any) {
-        toast.error(err.message || "Failed to delete item");
+        console.log(err.message || "Failed to delete item");
         return false;
       } finally {
         setLoading(false);

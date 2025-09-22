@@ -1,7 +1,5 @@
 import Conversation from "../models/conversation.model.js";
 import Message from "../models/message.model.js";
-import { createNotification } from "../utils/notification.js";
-
 export const sendMessage = async (req, res) => {
   try {
     const { message } = req.body;
@@ -34,14 +32,7 @@ export const sendMessage = async (req, res) => {
     // Save both message and conversation
     await Promise.all([newMessage.save(), conversation.save()]);
 
-    // Create a notification for the receiver if not self
-    if (receiverId.toString() !== senderId.toString()) {
-      await createNotification(
-        receiverId,
-        `${req.user.userName} sent you a message`
-      );
-    }
-
+   
     res.status(201).json(newMessage);
   } catch (error) {
     console.error("Error sending message:", error.message);

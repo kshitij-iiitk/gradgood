@@ -21,7 +21,7 @@ const DummyCredentials = () => {
   };
 
   return (
-    <div className="hidden md:flex flex-col fixed right-6 bottom-6 z-30 group">
+    <div className="md:flex flex-col fixed right-6 bottom-6 z-30 group">
       {/* Main credentials card */}
       <div className="relative bg-gradient-to-br from-slate-900/95 via-slate-800/90 to-slate-900/95 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-2xl p-6 w-80 text-white overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-3xl">
         {/* Background effects */}

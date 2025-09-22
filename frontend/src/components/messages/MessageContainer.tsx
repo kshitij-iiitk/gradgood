@@ -30,10 +30,10 @@ const MessageContainer = () => {
   }
 
   return (
-    <div className="flex flex-col bg-gradient-to-br from-slate-900/95 via-slate-800/90 to-slate-900/95 backdrop-blur-xl overflow-hidden lg:rounded-2xl">
+    <div className="flex flex-col h-full bg-gradient-to-br from-slate-900/95 via-slate-800/90 to-slate-900/95 backdrop-blur-xl overflow-hidden lg:rounded-2xl">
 
       {/* Messages Area */}
-      <div className="flex-1 overflow-y-auto px-4 py-6 space-y-5 scrollbar-hide relative hide-scrollbar">
+      <div className="flex-1 min-h-0 overflow-y-auto px-4 py-6 space-y-5 scrollbar-hide relative hide-scrollbar">
         {/* Background pattern */}
         <div className="absolute inset-0 opacity-5">
           <div
@@ -79,8 +79,8 @@ const MessageContainer = () => {
         <div ref={bottomRef} />
       </div>
 
-      {/* Input Area */}
-      <div className="relative border-t border-white/10 px-4 py-3 bg-gradient-to-r from-slate-800/80 to-slate-900/80 backdrop-blur-sm shrink-0">
+      {/* Input Area - Fixed at bottom */}
+      <div className="relative border-t border-white/10 px-4 py-3 bg-gradient-to-r from-slate-800/80 to-slate-900/80 backdrop-blur-sm flex-shrink-0">
         <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-purple-500/5" />
         <div className="relative">
           <MessageInput />

@@ -19,12 +19,12 @@ const useGetItem = () => {
       });
       const data = await res.json();
       if (data.error) {
-        toast.error(data.error);
+        console.log(data.error);
         throw new Error(data.error);
       }
       setItem(data);
     } catch (err: any) {
-      toast.error(err.message || "Failed to fetch item");
+      console.log(err.message || "Failed to fetch item");
     } finally {
       setLoading(false);
     }

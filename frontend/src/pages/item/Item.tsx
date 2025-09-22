@@ -3,11 +3,15 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+
 import DeleteItemButton from "@/components/messages/deleteitem";
+
 import useGetItem from "@/hooks/items/useGetItem";
 import useEditItem from "@/hooks/items/useEditItem";
 import { useCreateConversation } from "@/hooks/conversations/useCreateConversation";
 import { useAuthContext } from "@/context/AuthContext";
+import useGetUser from "@/hooks/useGetUser";
+import GPayButton from "@/components/gpaybutton/GPayButton";
 
 
 const ItemPage = () => {
@@ -20,12 +24,13 @@ const ItemPage = () => {
   const { loading: editLoading } = useEditItem(itemId?.toString()!);
   const { makeConversation, loading: convoLoading } = useCreateConversation();
   const { authUser } = useAuthContext();
-
+  const { user, refetch } = useGetUser(item?.belongTo._id);
 
   const [currentSlide, setCurrentSlide] = useState(0);
 
   useEffect(() => {
     if (itemId) getItem(itemId);
+    if (item) refetch();
     console.log(params);
 
   }, [itemId]);
@@ -38,8 +43,54 @@ const ItemPage = () => {
       _id: belongTo._id,
       userName: item?.userName ?? "",
       email: belongTo.email || "",
+      itemId: params.id || "",
     });
   };
+
+  const [transaction, setTransaction] = useState<null | {
+    id: string;
+    fromUser: string;
+    toUser: { name: string; upiId: string };
+    itemId: string;
+    amount: number;
+    upiId: string;
+    status: "pending" | "completed";
+  }>(null);
+
+  useEffect(() => {
+    if (!item || !authUser) return;
+
+    setTransaction({
+      id: crypto.randomUUID(),
+      fromUser: authUser._id,
+      toUser: {
+        name: item.userName,
+        upiId: user?.upiId ?? "user@upi",
+      },
+      itemId: itemId!,
+      amount: item.price,
+      upiId: user?.upiId ?? "user@upi",
+      status: "pending",
+    });
+  }, [item, authUser, user, itemId]);
+
+
+  const handlePaymentConfirmed = async (id: string) => {
+    try {
+      await fetch(`/api/transactions/confirm/${id}`, { method: "POST" });
+
+      setTransaction((prev) =>
+        prev ? { ...prev, status: "completed" } : prev
+      );
+    } catch (err) {
+      console.error("Failed to confirm payment", err);
+    }
+  };
+
+
+
+
+
 
   const editItem = () => navigate(`/edit-item/${itemId}`);
 
@@ -175,9 +226,9 @@ const ItemPage = () => {
                 </div>
 
                 <div className="flex items-center gap-3 py-4 border-t border-gray-700/50">
-                 <p className="text-white font-semibold">Seller :</p>
+                  <p className="text-white font-semibold">Seller :</p>
                   <div><p className="text-white font-semibold">{item.userName}</p>
-            
+
                   </div>
                 </div>
 
@@ -200,7 +251,14 @@ const ItemPage = () => {
 
             {/* Action Buttons */}
             <div className="flex gap-4">
-              {authUser?._id !== item.belongTo._id ? (
+              {authUser?._id !== item.belongTo._id ? (<>{authUser?._id !== item.belongTo._id && transaction && (
+                <GPayButton
+                  transaction={transaction}
+                  setTransaction={setTransaction}
+                  onConfirmPayment={handlePaymentConfirmed}
+                />
+              )}
+
                 <button
                   onClick={startConvo}
                   disabled={convoLoading}
@@ -219,7 +277,7 @@ const ItemPage = () => {
                       Start Conversation
                     </>
                   )}
-                </button>
+                </button></>
               ) : (
                 <div className="flex gap-4 w-full">
                   <button

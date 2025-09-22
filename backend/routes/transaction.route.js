@@ -1,12 +1,13 @@
 import express from "express";
+import protectedroute from "../middleware/protectRoute.js";
 import { createTransaction , confirmTransaction, getTransaction,getAllTransactions } from "../controllers/transaction.controllers.js";
 
 const router = express.Router();
 
 // Create a new transaction
-router.post("/create",createTransaction);
+router.post("/create",protectedroute,createTransaction);
 
-router.post("/:id/confirm",confirmTransaction);
+router.post("/confirm/:id",protectedroute,confirmTransaction);
 
 // Get a transaction by ID
 router.get("/:id",getTransaction);

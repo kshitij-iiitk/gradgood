@@ -22,7 +22,7 @@ export default function Notifications() {
         </div>
 
         {/* Loading state */}
-        {notifications.length === 0  ? (
+        {notifications.length === 0 ? (
           /* Empty state */
           <div className="flex flex-col items-center justify-center py-20">
             <div className="w-24 h-24 bg-gray-800/50 rounded-full flex items-center justify-center mb-6">
@@ -43,28 +43,26 @@ export default function Notifications() {
             <h3 className="text-xl font-semibold text-gray-300 mb-2">
               No notifications yet
             </h3>
-            
+
           </div>
         ) : (
           /* Notifications list */
           <div className="space-y-4">
             {notifications.map((notif: Notification) => (
-            <div
-              key={notif._id}
-                className={`group p-6 rounded-2xl bg-black/60 backdrop-blur-xl border border-gray-700/50 shadow-lg cursor-pointer transition-all duration-200 hover:scale-[1.01] hover:shadow-xl hover:border-indigo-500/30 ${
-                  !notif.read ? "border-indigo-500/50 bg-indigo-500/5" : ""
-                }`}
-              onClick={() => markAsRead(notif._id)}
-            >
+              <div
+                key={notif._id}
+                className={`group p-6 rounded-2xl bg-black/60 backdrop-blur-xl border border-gray-700/50 shadow-lg cursor-pointer transition-all duration-200 hover:scale-[1.01] hover:shadow-xl hover:border-indigo-500/30 ${!notif.read ? "border-indigo-500/50 bg-indigo-500/5" : ""
+                  }`}
+                onClick={() => markAsRead(notif._id)}
+              >
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex items-start gap-4 flex-1">
                     {/* Icon */}
                     <div
-                      className={`w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 ${
-                        !notif.read
+                      className={`w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 ${!notif.read
                           ? "bg-indigo-500/20 text-indigo-400"
                           : "bg-gray-700/50 text-gray-500"
-                      }`}
+                        }`}
                     >
                       <svg
                         className="w-6 h-6"
@@ -84,43 +82,25 @@ export default function Notifications() {
                     {/* Content */}
                     <div className="flex-1 min-w-0">
                       <p
-                        className={`font-medium leading-relaxed ${
-                          !notif.read ? "text-white" : "text-gray-300"
-                        }`}
+                        className={`font-medium leading-relaxed ${!notif.read ? "text-white" : "text-gray-300"
+                          }`}
                       >
-                  {notif.message}
-                </p>
-                      <div className="flex items-center gap-2 mt-2">
-                        <svg
-                          className="w-4 h-4 text-gray-500"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                          />
-                        </svg>
-                        <span className="text-gray-500 text-sm">
-                  {new Date(notif.createdAt).toLocaleString()}
-                </span>
-              </div>
+                        {notif.message}
+                      </p>
+                      
                     </div>
                   </div>
 
                   {/* Unread indicator */}
-              {!notif.read && (
+                  {!notif.read && (
                     <div className="flex items-center gap-2">
                       <span className="w-3 h-3 bg-indigo-500 rounded-full animate-pulse" />
                       <span className="text-indigo-400 text-xs font-medium">
                         NEW
                       </span>
                     </div>
-              )}
-            </div>
+                  )}
+                </div>
               </div>
             ))}
           </div>

@@ -8,6 +8,7 @@ import { useChatSelected } from "@/context/ChatContext";
 import { useAuthContext } from "@/context/AuthContext";
 import useConversation from "@/zustand/useConversation";
 
+import DeleteConversationButton from "@/components/messages/DeleteConversation";
 import { IoChevronBack } from "react-icons/io5";
 import Chat from "@/components/chat/chat";
 import NoChatSelected from "@/components/chat/NoChatSelected";
@@ -19,6 +20,7 @@ const Chatroom = () => {
   const location = useLocation();
   const { setChatSelected } = useChatSelected();
 
+  console.log("converasations: ", conversations);
 
   const [mobileView, setMobileView] = useState<"list" | "chat">("list");
 
@@ -70,7 +72,7 @@ const Chatroom = () => {
       setSelectedConversation(null)
 
     }
-      else{
+    else {
       setSelectedConversation(conv);
     }
     setMobileView("chat");
@@ -91,51 +93,51 @@ const Chatroom = () => {
           </h2>
           <p className="text-gray-400 text-sm">{conversations.length} conversation{conversations.length !== 1 ? 's' : ''}</p>
         </div>
-        
+
         {conversations.map((conv) => {
           const otherParticipants = conv.participants.filter(
             (p) => p._id !== authUser?._id
           );
+          console.log("others ", otherParticipants);
+
           const latestMessage = conv.messages[conv.messages.length - 1];
 
           return (
             <div
               key={conv._id}
               onClick={() => openConvo(conv)}
-              className={`cursor-pointer transition-all duration-300 p-4 rounded-2xl border shadow-lg hover:shadow-xl transform hover:scale-[1.02] ${
-                selectedConversation?._id === conv._id
-                  ? "bg-indigo-500/20 border-indigo-500/50 shadow-indigo-500/20"
-                  : "bg-black/60 backdrop-blur-xl border-gray-700/50 hover:border-gray-600/70 hover:bg-black/70"
-              }`}
+              className={`cursor-pointer transition-all duration-300 p-4 rounded-2xl border shadow-lg hover:shadow-xl transform hover:scale-[1.02] ${selectedConversation?._id === conv._id
+                ? "bg-indigo-500/20 border-indigo-500/50 shadow-indigo-500/20"
+                : "bg-black/60 backdrop-blur-xl border-gray-700/50 hover:border-gray-600/70 hover:bg-black/70"
+                }`}
             >
               <div className="flex items-center gap-3">
                 {/* Avatar */}
-                <div className="w-12 h-12 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full flex items-center justify-center text-white font-bold text-lg flex-shrink-0">
-                  {otherParticipants.length
-                    ? otherParticipants[0].userName?.charAt(0).toUpperCase()
-                    : "?"}
+                <div >
+                  <img src={otherParticipants.length
+                    ? otherParticipants[0]?.profilePic
+                    : "?"} alt="" className="w-12 h-12 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full flex items-center justify-center text-white font-bold text-lg flex-shrink-0" />
                 </div>
-                
+
                 <div className="flex-1 min-w-0">
-              <div className="font-semibold text-gray-100 truncate text-base">
-                {otherParticipants.length
-                  ? otherParticipants.map((p) => p.userName).join(", ")
-                  : "Unknown User"}
-              </div>
-              <div className="text-gray-400 text-sm truncate mt-1">
-                {latestMessage
-                  ? `${latestMessage.senderId._id === authUser?._id
-                    ? "You: "
+                  <div className="font-semibold text-gray-100 truncate text-base">
+                    {otherParticipants.length
+                      ? otherParticipants.map((p) => p.userName).join(", ")
+                      : "Unknown User"}
+                  </div>
+                  <div className="text-gray-400 text-sm truncate mt-1">
+                    {latestMessage
+                      ? `${latestMessage.senderId._id === authUser?._id
+                        ? "You: "
                         : ""
-                  }${latestMessage.message}`
-                  : "No messages yet"}
-              </div>
-            </div>
-                
-                {/* Unread indicator */}
-                {latestMessage && latestMessage.senderId._id !== authUser?._id && (
-                  <div className="w-3 h-3 bg-indigo-500 rounded-full"></div>
-                )}
+                      }${latestMessage.message}`
+                      : "No messages yet"}
+                  </div>
+                </div>
+
+                <DeleteConversationButton convoId={conv._id} onDeleted={refetch} />
+
+
               </div>
             </div>
           );
@@ -149,7 +151,7 @@ const Chatroom = () => {
           <Chat />
         ) : (
           <div className="flex-1 flex items-center justify-center">
-            <NoChatSelected/>
+            <NoChatSelected />
           </div>
         )}
       </div>
@@ -167,7 +169,7 @@ const Chatroom = () => {
             </h2>
             <p className="text-gray-400 text-sm">{conversations.length} conversation{conversations.length !== 1 ? 's' : ''}</p>
           </div>
-          
+
           {conversations.map((conv) => {
             const otherParticipants = conv.participants.filter(
               (p) => p._id !== authUser?._id
@@ -189,23 +191,23 @@ const Chatroom = () => {
                       ? otherParticipants[0].userName?.charAt(0).toUpperCase()
                       : "?"}
                   </div>
-                  
+
                   <div className="flex-1 min-w-0">
-                  <div className="font-semibold text-gray-100 truncate text-base">
-                    {otherParticipants.length
-                      ? otherParticipants.map((p) => p.userName).join(", ")
-                      : "Unknown User"}
-                  </div>
-                <div className="text-gray-400 text-sm truncate mt-1">
-                  {latestMessage
-                    ? `${latestMessage.senderId._id === authUser?._id
-                      ? "You: "
+                    <div className="font-semibold text-gray-100 truncate text-base">
+                      {otherParticipants.length
+                        ? otherParticipants.map((p) => p.userName).join(", ")
+                        : "Unknown User"}
+                    </div>
+                    <div className="text-gray-400 text-sm truncate mt-1">
+                      {latestMessage
+                        ? `${latestMessage.senderId._id === authUser?._id
+                          ? "You: "
                           : ""
-                    }${latestMessage.message}`
-                    : "No messages yet"}
-                </div>
-              </div>
-                  
+                        }${latestMessage.message}`
+                        : "No messages yet"}
+                    </div>
+                  </div>
+
                   {/* Unread indicator */}
                   {latestMessage && latestMessage.senderId._id !== authUser?._id && (
                     <div className="w-3 h-3 bg-indigo-500 rounded-full"></div>

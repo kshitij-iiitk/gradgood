@@ -2,6 +2,7 @@ import { type Message } from "./message";
 
 export interface Conversation {
   _id: string;
+  itemId:string;
   participants: {
     userName: any;
     email: any;

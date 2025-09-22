@@ -48,7 +48,7 @@ const useEditItem = (itemId: string) => {
       navigate(`/market/${itemId}`);
       return data;
     } catch (err: any) {
-      toast.error(err.message);
+      console.log(err.message);
     } finally {
       setLoading(false);
     }

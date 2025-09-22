@@ -42,7 +42,7 @@ const useSendMessage = () => {
         prev.map((msg) => (msg._id === tempId ? savedMsg : msg))
       );
     } catch (err: any) {
-      toast.error(err.message || "Failed to send message");
+      console.log(err.message || "Failed to send message");
       setMessages((prev) => prev.filter((msg) => msg._id !== tempId));
     } finally {
       setLoading(false);
