@@ -48,7 +48,7 @@ const ItemPage = () => {
   };
 
   const [transaction, setTransaction] = useState<null | {
-    id: string;
+    _id: string;
     fromUser: string;
     toUser: { name: string; upiId: string };
     itemId: string;
@@ -61,7 +61,7 @@ const ItemPage = () => {
     if (!item || !authUser) return;
 
     setTransaction({
-      id: crypto.randomUUID(),
+      _id: crypto.randomUUID(),
       fromUser: authUser._id,
       toUser: {
         name: item.userName,

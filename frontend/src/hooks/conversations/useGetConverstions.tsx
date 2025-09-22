@@ -1,5 +1,4 @@
 import { useState, useEffect, useCallback } from "react";
-import toast from "react-hot-toast";
 import { useAuthContext } from "@/context/AuthContext";
 import { type Conversation } from "@/types/conversation";
 
